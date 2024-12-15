@@ -43,4 +43,17 @@ timeType: "epoch" or "iso" or "dateTime"
 colorizedStyledLog:
     Adds coloring via Chalk to the formated log for either console or logfile    
 
-colorizeStyledLog: true f
+## Log router
+
+add a /app/logger/route.ts to your project. The route.ts should contain
+
+```typescript
+import { LogReceiver } from "log-to-route";
+
+export async function POST(req: Request) {
+  const res = await LogReceiver(req);
+  return new Response(await res.text(), { status: res.status });
+}
+```
+
+

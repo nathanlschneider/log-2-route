@@ -40,7 +40,7 @@ type BodyShape = {
 
 const log = async (data: BodyShape) => {
   try {
-    await fetch(`http://localhost:3001/node_modules/log-to-route/app/logger/`, {
+    await fetch(`http://localhost:3001/logger`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ export function validateApiKey(req:Request): boolean {
   return apiKey === process.env.API_KEY;
 }
 
-export async function L2R_POST(req:Request) {
+export async function LogReceiver(req:Request) {
   if (!validateApiKey(req)) {
     return new Response('Unauthorized', { status: 401 });
   }
