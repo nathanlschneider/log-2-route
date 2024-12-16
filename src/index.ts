@@ -4,39 +4,12 @@ import { appendFile } from 'node:fs';
 import path from 'path';
 import chalk from 'chalk';
 import { promises as fs } from 'fs';
-
-type TimeShape = {
-  locale: string;
-  epoch: number;
-};
-
-type ErrorShape = {
-  message?: string;
-  level?: number;
-};
-
-type InfoShape = {
-  message: string;
-};
-
-type SuccessShape = {
-  message: string;
-};
-
-type DebugShape = {
-  message: string | object;
-};
-
-type WarnShape = {
-  message: string | object;
-  level: number | string;
-};
-
-type BodyShape = {
-  type: 'error' | 'info' | 'debug' | 'warn' | 'success';
-  time: { locale: string; epoch: number };
-  data: ErrorShape | InfoShape | DebugShape | WarnShape;
-};
+import { InfoShape, TimeShape, BodyShape, ErrorShape, SuccessShape, DebugShape, WarnShape, ConfigShape } from './Types';
+import timeNow from './utils/timeNow';
+import validateConfigShape from './utils/validateConfigShape';
+import defaultConfig from './utils/defaultConfig';
+import validateApiKey from './utils/validateApiKey';
+import checkForFile from './utils/checkForFile';
 
 const log = async (data: BodyShape) => {
   try {
@@ -44,7 +17,7 @@ const log = async (data: BodyShape) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': `${process.env.API_KEY}`,
+        'x-api-key': `${process.env.L2R_API_KEY}`,
       },
       body: JSON.stringify(data),
     });
@@ -53,67 +26,71 @@ const log = async (data: BodyShape) => {
   }
 };
 
-const timeNow: TimeShape = {
-  locale: new Date(Date.now()).toLocaleString(),
-  epoch: Date.now(),
-};
-
 export const logger = {
   error: async function (message: string, loggedObj: ErrorShape) {
-    loggedObj.message = message;
-    await log({ type: 'error', time: timeNow, data: loggedObj });
+    try {
+      loggedObj.message = message;
+      await log({ type: 'error', time: timeNow(), data: loggedObj });
+    } catch (err) {
+      console.error('Failed to log error:', err);
+    }
   },
 
   info: async function (loggedStr: string) {
-    const loggedObj: InfoShape = { message: loggedStr };
-    await log({ type: 'info', time: timeNow, data: loggedObj });
+    try {
+      const loggedObj: InfoShape = { message: loggedStr };
+      await log({ type: 'info', time: timeNow(), data: loggedObj });
+    } catch (err) {
+      console.error('Failed to log error:', err);
+    }
   },
 
   success: async function (loggedStr: string) {
-    const loggedObj: SuccessShape = { message: loggedStr };
-    await log({ type: 'success', time: timeNow, data: loggedObj });
+    try {
+      const loggedObj: SuccessShape = { message: loggedStr };
+      await log({ type: 'success', time: timeNow(), data: loggedObj });
+    } catch (err) {
+      console.error('Failed to log error:', err);
+    }
   },
 
   debug: async function (loggedStr: string | object) {
-    const loggedObj: DebugShape = { message: loggedStr };
-    await log({ type: 'debug', time: timeNow, data: loggedObj });
+    try {
+      const loggedObj: DebugShape = { message: loggedStr };
+      await log({ type: 'debug', time: timeNow(), data: loggedObj });
+    } catch (err) {
+      console.error('Failed to log error:', err);
+    }
   },
 
   warn: async function (loggedStr: string | object, level: number | string) {
-    const loggedObj: WarnShape = { message: loggedStr, level: level };
-    await log({ type: 'warn', time: timeNow, data: loggedObj });
+    try {
+      const loggedObj: WarnShape = { message: loggedStr, level: level };
+      await log({ type: 'warn', time: timeNow(), data: loggedObj });
+    } catch (err) {
+      console.error('Failed to log error:', err);
+    }
   },
 };
 
-const config = {
-  logFile: {
-    format: 'styled',
-    enabled: true,
-    fileName: 'app.log',
-    location: './',
-    timeType: 'epoch',
-    colorizeStyledLog: false,
-  },
-  console: {
-    format: 'styled',
-    enabled: true,
-    timeType: 'locale',
-    colorizeStyledLog: true,
-  },
-};
-
-export function validateApiKey(req:Request): boolean {
-  const apiKey = req.headers.get('x-api-key');
-  return apiKey === process.env.API_KEY;
-}
-
-export async function LogReceiver(req:Request) {
+export async function LogReceiver(req: Request): Promise<Response> {
   if (!validateApiKey(req)) {
-    return new Response('Unauthorized', { status: 401 });
+    return new Response('Bad Key', { status: 401 });
   }
 
-  const loggerConfigPath = path.join(process.cwd(), 'l2r.config.json');
-  const loggerConfig = JSON.parse(await fs.readFile(loggerConfigPath, 'utf-8')) || config;
+  const loggerConfigFile = path.join(process.cwd(), 'l2r.config.json');
+
+  const loggerConfigFileContent = (await checkForFile(loggerConfigFile)) ? await fs.readFile(loggerConfigFile, 'utf-8') : '';
+
+  let loggerConfig: ConfigShape = await JSON.parse(loggerConfigFileContent);
+
+  const validConfig = await validateConfigShape(defaultConfig, loggerConfig);
+
+  if (!validConfig) {
+    console.error('Configuration file is not valid.');
+    loggerConfig = defaultConfig;
+  }
+
   const colorMap: { [key: string]: (text: string) => string } = {
     error: chalk.bgRedBright,
     info: chalk.blueBright,
@@ -154,6 +131,7 @@ export async function LogReceiver(req:Request) {
         );
       }
     }
+
     if (loggerConfig.console.enabled) {
       if (loggerConfig.console.format === 'ndjson'.toLocaleLowerCase()) {
         const ndJsonStr = JSON.stringify(body);
@@ -170,9 +148,9 @@ export async function LogReceiver(req:Request) {
         );
       }
     }
-    return Response.json({ status: 200 });
+    return new Response('Ok', { status: 200, statusText: 'Ok' });
   } catch (error) {
     console.error(error);
-    return Response.json({ status: 500, error: 'Internal Server Error' });
+    return new Response(JSON.stringify({ status: 500, error: (error as Error).message }), { status: 500 });
   }
 }
