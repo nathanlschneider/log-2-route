@@ -87,7 +87,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
   const validConfig = await validateConfigShape(defaultConfig, loggerConfig);
 
   if (!validConfig) {
-    console.error('Configuration file is not valid.');
+    console.error('\n' + chalk.bgRedBright('-ERROR-'), 'Invalid l2r config file. Using default config.\n');
     loggerConfig = defaultConfig;
   }
 
