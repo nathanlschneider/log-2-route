@@ -1,5 +1,3 @@
-import { z } from 'zod';
-
 export type TimeShape = {
   locale: string;
   epoch: number;
@@ -49,20 +47,3 @@ export type ConfigShape = {
     colorizeStyledLog: boolean;
   };
 };
-
-const ConfigShape = z.object({
-    logFile: z.object({
-      format: z.string(),
-      enabled: z.boolean(),
-      fileName: z.string(),
-      location: z.string(),
-      timeType: z.string(),
-      colorizeStyledLog: z.boolean(),
-    }),
-    console: z.object({
-      format: z.string(),
-      enabled: z.boolean(),
-      timeType: z.string(),
-      colorizeStyledLog: z.boolean(),
-    }),
-  });

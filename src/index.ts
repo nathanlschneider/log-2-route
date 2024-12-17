@@ -1,15 +1,15 @@
 'user server';
 
-import { appendFile } from 'node:fs';
-import path from 'path';
 import chalk from 'chalk';
 import { promises as fs } from 'fs';
-import { InfoShape, TimeShape, BodyShape, ErrorShape, SuccessShape, DebugShape, WarnShape, ConfigShape } from './Types';
-import timeNow from './utils/timeNow';
-import validateConfigShape from './utils/validateConfigShape';
-import defaultConfig from './utils/defaultConfig';
-import validateApiKey from './utils/validateApiKey';
+import { appendFile } from 'node:fs';
+import path from 'path';
+import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from './Types';
 import checkForFile from './utils/checkForFile';
+import defaultConfig from './utils/defaultConfig';
+import timeNow from './utils/timeNow';
+import validateApiKey from './utils/validateApiKey';
+import validateConfigShape from './utils/validateConfigShape';
 
 const log = async (data: BodyShape) => {
   try {
@@ -80,9 +80,16 @@ export async function LogReceiver(req: Request): Promise<Response> {
 
   const loggerConfigFile = path.join(process.cwd(), 'l2r.config.json');
 
-  const loggerConfigFileContent = (await checkForFile(loggerConfigFile)) ? await fs.readFile(loggerConfigFile, 'utf-8') : '';
+  let loggerConfigFileContent = '{}'; // Default to an empty object
+  if (await checkForFile(loggerConfigFile)) {
+    try {
+      loggerConfigFileContent = await fs.readFile(loggerConfigFile, 'utf-8');
+    } catch (err) {
+      console.error('Failed to read logger config file:', err);
+    }
+  }
 
-  let loggerConfig: ConfigShape = await JSON.parse(loggerConfigFileContent);
+  let loggerConfig: ConfigShape = JSON.parse(loggerConfigFileContent);
 
   const validConfig = await validateConfigShape(defaultConfig, loggerConfig);
 
@@ -98,8 +105,12 @@ export async function LogReceiver(req: Request): Promise<Response> {
     success: chalk.greenBright,
   };
 
+  const body = await req.json();
+  if (body == null || typeof body.type !== 'string' || body.type.length === 0) {
+    return new Response('Invalid log type', { status: 400 });
+  }
+
   try {
-    const body = await req.json();
     const eventType = (colorMap[body.type] || chalk.greenBright)(body.type.toUpperCase());
 
     const colorizedLocaleStr = `[${chalk.cyan(body.time.locale.split(', ')[0])}, ${chalk.cyan(body.time.locale.split(', ')[1])}] ${eventType} - ${
@@ -150,7 +161,6 @@ export async function LogReceiver(req: Request): Promise<Response> {
     }
     return new Response('Ok', { status: 200, statusText: 'Ok' });
   } catch (error) {
-    console.error(error);
     return new Response(JSON.stringify({ status: 500, error: (error as Error).message }), { status: 500 });
   }
 }
