@@ -33,17 +33,18 @@ export type BodyShape = {
 
 export type ConfigShape = {
   logFile: {
-    format: string;
+    format: 'styled' | 'ndjson';
     enabled: boolean;
     fileName: string;
     location: string;
-    timeType: string;
+    timeType: 'locale' | 'epoch';
     colorizeStyledLog: boolean;
   };
   console: {
-    format: string;
+    format: 'styled' | 'ndjson';
     enabled: boolean;
-    timeType: string;
+    timeType: 'locale' | 'epoch';
     colorizeStyledLog: boolean;
   };
 };
+
