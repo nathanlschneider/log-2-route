@@ -21,14 +21,14 @@ export type DebugShape = {
 };
 
 export type WarnShape = {
-  message: string | object;
-  level: number | string;
+  message?: string | object;
+  level?: number | string;
 };
 
 export type BodyShape = {
   type: 'error' | 'info' | 'debug' | 'warn' | 'success';
   time: { locale: string; epoch: number };
-  data: InfoShape  | ErrorShaper | DebugShape | WarnShape | SuccessShape | TimeShape;
+  data: InfoShape  | ErrorShape | DebugShape | WarnShape | SuccessShape | TimeShape;
 };
 
 export type ConfigShape = {

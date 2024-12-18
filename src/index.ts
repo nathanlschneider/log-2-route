@@ -27,45 +27,42 @@ const log = async (data: BodyShape) => {
 };
 
 export const logger = {
-  error: async function (message: string, loggedObj: ErrorShape) {
+  error: async function (message: string, loggedError: ErrorShape) {
     try {
-      loggedObj.message = message;
-      await log({ type: 'error', time: timeNow(), data: loggedObj });
+      loggedError.message = message;
+      await log({ type: 'error', time: timeNow(), data: loggedError });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
   },
 
-  info: async function (loggedStr: string) {
+  info: async function (loggedInfo: InfoShape ) {
     try {
-      const loggedObj: InfoShape = { message: loggedStr };
-      await log({ type: 'info', time: timeNow(), data: loggedObj });
+      await log({ type: 'info', time: timeNow(), data: loggedInfo });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
   },
 
-  success: async function (loggedStr: string) {
+  success: async function (loggedSuccess: SuccessShape) {
     try {
-      const loggedObj: SuccessShape = { message: loggedStr };
-      await log({ type: 'success', time: timeNow(), data: loggedObj });
+      await log({ type: 'success', time: timeNow(), data: loggedSuccess });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
   },
 
-  debug: async function (loggedStr: string | object) {
+  debug: async function (loggedDebug: DebugShape) {
     try {
-      const loggedObj: DebugShape = { message: loggedStr };
-      await log({ type: 'debug', time: timeNow(), data: loggedObj });
+      await log({ type: 'debug', time: timeNow(), data: loggedDebug });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
   },
 
-  warn: async function (loggedStr: string | object, level: number | string) {
+  warn: async function (loggedWarn: WarnShape, level: number | string) {
     try {
-      const loggedObj: WarnShape = { message: loggedStr, level: level };
+      const loggedObj: WarnShape = { message: loggedWarn, level: level };
       await log({ type: 'warn', time: timeNow(), data: loggedObj });
     } catch (err) {
       console.error('Failed to log error:', err);
