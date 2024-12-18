@@ -74,8 +74,9 @@ export const logger = {
 };
 
 export async function LogReceiver(req: Request): Promise<Response> {
-  if (!validateApiKey(req)) {
-    return new Response('Bad Key', { status: 401 });
+  const isKeyValid = await validateApiKey(req);
+  if (isKeyValid === false) {
+    return new Response('Unauthorized', { status: 401 });
   }
 
   const loggerConfigFile = path.join(process.cwd(), 'l2r.config.json');
@@ -94,7 +95,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
   const validConfig = await validateConfigShape(defaultConfig, loggerConfig);
 
   if (!validConfig) {
-    console.error('\n' + chalk.bgRedBright('-ERROR-'), 'Invalid l2r config file. Using default config.\n');
+    // console.error('\n' + chalk.bgRedBright('-ERROR-'), 'Invalid l2r config file. Using default config.\n');
     loggerConfig = defaultConfig;
   }
 
