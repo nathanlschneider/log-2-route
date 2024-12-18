@@ -1,5 +1,5 @@
 import { logger } from '../src/index';
-import { BodyShape, ErrorShape, InfoShape, SuccessShape, DebugShape, WarnShape } from '../src/Types';
+import { BodyShape, ErrorShape, InfoShape, SuccessShape, DebugShape, WarnShape } from '@log-to-route/types';
 
 jest.mock('../src/index', () => ({
     logger: {

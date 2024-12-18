@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { promises as fs } from 'fs';
 import { appendFile } from 'node:fs';
 import path from 'path';
-import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from './Types';
+import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from '../src/types/types';
 import checkForFile from './utils/checkForFile';
 import defaultConfig from './utils/defaultConfig';
 import timeNow from './utils/timeNow';
