@@ -9,20 +9,23 @@ export type ErrorShape = {
 };
 
 export type InfoShape = {
-  message: string;
+  message?: string;
+  level?: number;
 };
 
 export type SuccessShape = {
-  message: string;
+  message?: string;
+  level?: number;
 };
 
 export type DebugShape = {
-  message: string | object;
+  message?: string;
+  level?: number;
 };
 
 export type WarnShape = {
-  message?: string | object;
-  level?: number | string;
+  message?: string;
+  level?: number;
 };
 
 export type BodyShape = {

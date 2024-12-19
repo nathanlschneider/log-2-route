@@ -27,45 +27,48 @@ const log = async (data: BodyShape) => {
 };
 
 export const logger = {
-  error: async function (message: string, loggedError: ErrorShape) {
+  error: async function (message: string, level: number) {
+    const loggedError: ErrorShape = { message: message, level: level };
     try {
-      loggedError.message = message;
       await log({ type: 'error', time: timeNow(), data: loggedError });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
   },
 
-  info: async function (loggedInfo: InfoShape ) {
+  info: async function (message: string, level: number) {
+    const loggedInfo: InfoShape = {  message: message, level: level  };
     try {
       await log({ type: 'info', time: timeNow(), data: loggedInfo });
     } catch (err) {
-      console.error('Failed to log error:', err);
+      console.error('Failed to log info:', err);
     }
   },
 
-  success: async function (loggedSuccess: SuccessShape) {
+  success: async function (message: string, level: number) {
+    const loggedSuccess: SuccessShape = { message: message, level: level };
     try {
       await log({ type: 'success', time: timeNow(), data: loggedSuccess });
     } catch (err) {
-      console.error('Failed to log error:', err);
+      console.error('Failed to log success:', err);
     }
   },
 
-  debug: async function (loggedDebug: DebugShape) {
+  debug: async function (message: string, level: number) {
+    const loggedDebug: DebugShape = { message: message, level: level };
     try {
       await log({ type: 'debug', time: timeNow(), data: loggedDebug });
     } catch (err) {
-      console.error('Failed to log error:', err);
+      console.error('Failed to log debug:', err);
     }
   },
 
-  warn: async function (loggedWarn: WarnShape, level: number | string) {
+  warn: async function (message: string, level: number) {
+    const loggedWarn: WarnShape = { message: message, level: level };
     try {
-      const loggedObj: WarnShape = { message: loggedWarn, level: level };
-      await log({ type: 'warn', time: timeNow(), data: loggedObj });
+      await log({ type: 'warn', time: timeNow(), data: loggedWarn });
     } catch (err) {
-      console.error('Failed to log error:', err);
+      console.error('Failed to log warn:', err);
     }
   },
 };
