@@ -1,4 +1,4 @@
-import { ConfigShape } from "../Types";
+import { ConfigShape } from "../types/types";
 import flattenJSON from "./flattenJSON";
 
 export default async function validateConfigShape(config: ConfigShape, loggerFileConfig: ConfigShape): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { ConfigShape } from "../Types";
+import { ConfigShape } from "../types/types";
 
 const defaultConfig: ConfigShape = {
   logFile: {
