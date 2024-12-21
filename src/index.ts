@@ -79,6 +79,8 @@ export async function LogReceiver(req: Request): Promise<Response> {
     return new Response('Unauthorized', { status: 401 });
   }
 
+  let send = { logLocation: '', logData: '' };
+
   const loggerConfigFile = path.join(process.cwd(), 'l2r.config.json');
 
   let loggerConfigFileContent = '{}'; // Default to an empty object
@@ -107,7 +109,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
   };
 
   const body = await req.json();
-  if (body == null || typeof body.type !== 'string' || body.type.length === 0) {
+  if (body == null || typeof body.type !== 'string' || body.type.length === 0 || body.logLocation === "" && body.logData === "") {
     return new Response('Invalid log type', { status: 400 });
   }
 
@@ -124,23 +126,18 @@ export async function LogReceiver(req: Request): Promise<Response> {
     if (loggerConfig.logFile.enabled) {
       if (loggerConfig.logFile.format === 'ndjson'.toLocaleLowerCase()) {
         const ndJsonStr = JSON.stringify(body);
-        appendFile(`${loggerConfig.logFile.location}/${loggerConfig.logFile.fileName}`, ndJsonStr + '\n', (err) => {
-          if (err) throw err;
-        });
+
+        send.logLocation = `${loggerConfig.logFile.location}/${loggerConfig.logFile.fileName}`;
+        send.logData = ndJsonStr + '\n';
       } else {
-        appendFile(
-          `${loggerConfig.logFile.location}/${loggerConfig.logFile.fileName}`,
-          loggerConfig.logFile.colorizeStyledLog
-            ? body.time.type === 'epoch'
-              ? colorizedEpochStr + '\n'
-              : formattedEpochStr + '\n'
-            : body.time.type === 'locale'
-            ? colorizedLocaleStr + '\n'
-            : formattedLocaleStr + '\n',
-          (err) => {
-            if (err) throw err;
-          }
-        );
+        send.logLocation = `${loggerConfig.logFile.location}/${loggerConfig.logFile.fileName}`;
+        send.logData = loggerConfig.logFile.colorizeStyledLog
+          ? body.time.type === 'epoch'
+            ? colorizedEpochStr + '\n'
+            : formattedEpochStr + '\n'
+          : body.time.type === 'locale'
+          ? colorizedLocaleStr + '\n'
+          : formattedLocaleStr + '\n';
       }
     }
 
@@ -160,7 +157,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
         );
       }
     }
-    return new Response('Ok', { status: 200, statusText: 'Ok' });
+    return new Response(JSON.stringify(send), { status: 200, statusText: 'Ok' });
   } catch (error) {
     return new Response(JSON.stringify({ status: 500, error: (error as Error).message }), { status: 500 });
   }
