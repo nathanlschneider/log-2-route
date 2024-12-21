@@ -9,7 +9,9 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@log-to-route/types": ["src/types/types"]
+      "src/*": ["./src/*"],
+      "@log-to-route/types": ["./src/types/types"],
+      "@log-to-route/utils/*": ["./src/utils/*"]
     }
   }
 }

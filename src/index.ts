@@ -4,12 +4,12 @@ import chalk from 'chalk';
 import { promises as fs } from 'fs';
 import { appendFile } from 'node:fs';
 import path from 'path';
-import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from '../src/types/types';
-import checkForFile from './utils/checkForFile';
-import defaultConfig from './utils/defaultConfig';
-import timeNow from './utils/timeNow';
-import validateApiKey from './utils/validateApiKey';
-import validateConfigShape from './utils/validateConfigShape';
+import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from '@log-to-route/types';
+import checkForFile from '@log-to-route/utils/checkForFile';
+import defaultConfig from '@log-to-route/utils/defaultConfig';
+import timeNow from '@log-to-route/utils/timeNow';
+import validateApiKey from '@log-to-route/utils/validateApiKey';
+import validateConfigShape from '@log-to-route/utils/validateConfigShape';
 
 const log = async (data: BodyShape) => {
   try {
