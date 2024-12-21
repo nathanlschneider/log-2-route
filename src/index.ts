@@ -1,15 +1,20 @@
-'user server';
-
-import chalk from 'chalk';
-import { promises as fs } from 'fs';
-import { appendFile } from 'node:fs';
-import path from 'path';
-import { BodyShape, ConfigShape, DebugShape, ErrorShape, InfoShape, SuccessShape, WarnShape } from '@log-to-route/types';
+import {
+  BodyShape,
+  ConfigShape,
+  DebugShape,
+  ErrorShape,
+  InfoShape,
+  SuccessShape,
+  WarnShape,
+} from '@log-to-route/types';
 import checkForFile from '@log-to-route/utils/checkForFile';
 import defaultConfig from '@log-to-route/utils/defaultConfig';
 import timeNow from '@log-to-route/utils/timeNow';
 import validateApiKey from '@log-to-route/utils/validateApiKey';
 import validateConfigShape from '@log-to-route/utils/validateConfigShape';
+import chalk from 'chalk';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 const log = async (data: BodyShape) => {
   try {
@@ -97,7 +102,10 @@ export async function LogReceiver(req: Request): Promise<Response> {
   const validConfig = await validateConfigShape(defaultConfig, loggerConfig);
 
   if (!validConfig) {
-    console.error(chalk.bgRedBright(' ERROR '), 'Invalid l2r config file. Using default config.');
+    console.error(
+      chalk.bgRedBright(' ERROR '),
+      'Invalid l2r config file. Using default config.'
+    );
     loggerConfig = defaultConfig;
   }
 
@@ -109,19 +117,34 @@ export async function LogReceiver(req: Request): Promise<Response> {
   };
 
   const body = await req.json();
-  if (body == null || typeof body.type !== 'string' || body.type.length === 0 || body.logLocation === "" && body.logData === "") {
+  if (
+    body == null ||
+    typeof body.type !== 'string' ||
+    body.type.length === 0 ||
+    (body.logLocation === '' && body.logData === '')
+  ) {
     return new Response('Invalid log type', { status: 400 });
   }
 
   try {
-    const eventType = (colorMap[body.type] || chalk.greenBright)(body.type.toUpperCase());
+    const eventType = (colorMap[body.type] || chalk.greenBright)(
+      body.type.toUpperCase()
+    );
 
-    const colorizedLocaleStr = `[${chalk.cyan(body.time.locale.split(', ')[0])}, ${chalk.cyan(body.time.locale.split(', ')[1])}] ${eventType} - ${
+    const colorizedLocaleStr = `[${chalk.cyan(
+      body.time.locale.split(', ')[0]
+    )}, ${chalk.cyan(body.time.locale.split(', ')[1])}] ${eventType} - ${
       body.data.message
     }`;
-    const formattedLocaleStr = `[${body.time.locale}] ${body.type.toUpperCase()} - ${body.data.message}`;
-    const colorizedEpochStr = `[${chalk.cyan(body.time.epoch)}] ${eventType} - ${body.data.message}`;
-    const formattedEpochStr = `[${body.time.epoch}] ${body.type.toUpperCase()} - ${body.data.message}`;
+    const formattedLocaleStr = `[${
+      body.time.locale
+    }] ${body.type.toUpperCase()} - ${body.data.message}`;
+    const colorizedEpochStr = `[${chalk.cyan(
+      body.time.epoch
+    )}] ${eventType} - ${body.data.message}`;
+    const formattedEpochStr = `[${
+      body.time.epoch
+    }] ${body.type.toUpperCase()} - ${body.data.message}`;
 
     if (loggerConfig.logFile.enabled) {
       if (loggerConfig.logFile.format === 'ndjson'.toLocaleLowerCase()) {
@@ -157,8 +180,14 @@ export async function LogReceiver(req: Request): Promise<Response> {
         );
       }
     }
-    return new Response(JSON.stringify(send), { status: 200, statusText: 'Ok' });
+    return new Response(JSON.stringify(send), {
+      status: 200,
+      statusText: 'Ok',
+    });
   } catch (error) {
-    return new Response(JSON.stringify({ status: 500, error: (error as Error).message }), { status: 500 });
+    return new Response(
+      JSON.stringify({ status: 500, error: (error as Error).message }),
+      { status: 500 }
+    );
   }
 }
