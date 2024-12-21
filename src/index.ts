@@ -27,8 +27,8 @@ const log = async (data: BodyShape) => {
 };
 
 export const logger = {
-  error: async function (message: string, level: number) {
-    const loggedError: ErrorShape = { message: message, level: level };
+  error: async function (message: string) {
+    const loggedError: ErrorShape = { message: message };
     try {
       await log({ type: 'error', time: timeNow(), data: loggedError });
     } catch (err) {
@@ -36,8 +36,8 @@ export const logger = {
     }
   },
 
-  info: async function (message: string, level: number) {
-    const loggedInfo: InfoShape = {  message: message, level: level  };
+  info: async function (message: string) {
+    const loggedInfo: InfoShape = { message: message };
     try {
       await log({ type: 'info', time: timeNow(), data: loggedInfo });
     } catch (err) {
@@ -45,8 +45,8 @@ export const logger = {
     }
   },
 
-  success: async function (message: string, level: number) {
-    const loggedSuccess: SuccessShape = { message: message, level: level };
+  success: async function (message: string) {
+    const loggedSuccess: SuccessShape = { message: message };
     try {
       await log({ type: 'success', time: timeNow(), data: loggedSuccess });
     } catch (err) {
@@ -54,8 +54,8 @@ export const logger = {
     }
   },
 
-  debug: async function (message: string, level: number) {
-    const loggedDebug: DebugShape = { message: message, level: level };
+  debug: async function (message: string) {
+    const loggedDebug: DebugShape = { message: message };
     try {
       await log({ type: 'debug', time: timeNow(), data: loggedDebug });
     } catch (err) {
