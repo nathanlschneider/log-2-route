@@ -140,7 +140,8 @@ Distributed under the MIT. See `LICENSE.txt` for more information.
 
 Nathan Schneider - nlschneider@gmail.com
 
-Project Link: [[https://github.com/nathanlschneider/log-to-route](https://github.com/nathanlschneider/log-to-route)]
+GitHub: [[https://github.com/nathanlschneider/log-to-route](https://github.com/nathanlschneider/log-to-route)]
+NPM:    [[https://github.com/nathanlschneider/log-to-route](https://github.com/nathanlschneider/log-to-route)]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
