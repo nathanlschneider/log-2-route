@@ -1,10 +1,8 @@
 <a id="readme-top"></a>
-<!-- PROJECT LOGO -->![image](https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa)
-
 <br />
 <div align="center">
   <a href="https://github.com/nathanlschneider/log-to-route">
-    <img src="https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa" alt="Logo" width="194" height="155">
+    <img src="https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa" alt="Logo" width="155" height="66">
   </a>
 
 <h3 align="center">Log to Route</h3>
