@@ -10,10 +10,9 @@
   <p align="center">
     <strong>Log2Route: Front and back end Logging for Next.js Apps</strong>
     <br/>
-    Log2Route lets you quickly create and consume logs of your Next.js app.<br/>
-    Track events, debug issues, and keep an eye on performance all in<br/>
-    one place!
-    Inspired by other loggers, you can out to either file or console, or both<br/>
+    Log2Route lets you quickly create and consume logs of your<br/> 
+    Next.js app. Track events, debug issues, and keep an eye on performance<br/>
+    all in one place! Inspired by other loggers, you can out to either file or console, or both<br/>
     in Newline delimited JSON (<a href="https://github.com/ndjson/ndjson-spec">https://github.com/ndjson/ndjson-spec</a>) or a more readable and stylized format for direct viewing.
     <br />
     <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
