@@ -1,30 +1,10 @@
 <a id="readme-top"></a>
+<!-- PROJECT LOGO -->![image](https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa)
 
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/nathanlschneider/log-to-route">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa" alt="Logo" width="194" height="155">
   </a>
 
 <h3 align="center">Log to Route</h3>
