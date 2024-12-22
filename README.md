@@ -21,8 +21,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -55,7 +53,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-To use the logger you must be using NextJS versions 14+ with App router
+To use the logger you app must be using NextJS version 14+ with the App router
 
 ### Installation
 
@@ -63,16 +61,18 @@ To use the logger you must be using NextJS versions 14+ with App router
   ```sh
   npm i log-to-route
   ```
-  * yarn
+* yarn
   ```sh
   yarn i log-to-route
   ```
+Create a new route (/app/logger/route.ts) using this code
+
+
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- USAGE EXAMPLES -->
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
