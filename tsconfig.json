@@ -8,10 +8,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "baseUrl": "./",
-    "paths": {
-      "src/*": ["./src/*"],
-      "@log-to-route/types": ["./src/types/types"],
-      "@log-to-route/utils/*": ["./src/utils/*"]
-    }
   }
 }

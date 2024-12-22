@@ -51,3 +51,8 @@ export type ConfigShape = {
   };
 };
 
+export type BodyConfig = {
+  type: string;
+  time: { locale: string; epoch: number };
+  data: InfoShape;
+};

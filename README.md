@@ -2,7 +2,7 @@
 
 ## l2r.config.json
 
-Create an `l2r.config.json` file in the root of your app and add the following:
+Create an l2r.config.json file in the root of your app and add the following:
 
 ```json
 {
@@ -23,12 +23,11 @@ Create an `l2r.config.json` file in the root of your app and add the following:
 }
 ```
 ### Usage
-import { logger } from 'log-2-route'
+import { logger } from 'log-to-route'
 
 logger.info("Log message");
 
-### Config Options
-Coming...
+
 
 ## Log Router
 

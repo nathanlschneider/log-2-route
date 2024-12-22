@@ -8,4 +8,13 @@ const altChalk = {
   orange: (text: string) => `\x1b[38;5;208m${text}\x1b[0m`,
 };
 
-export default altChalk;
+
+const colorMap: { [key: string]: (text: string) => string } = {
+  error: altChalk.red,
+  info: altChalk.blue,
+  debug: altChalk.yellow,
+  success: altChalk.green,
+  warn: altChalk.orange,
+};
+
+export {altChalk, colorMap};
