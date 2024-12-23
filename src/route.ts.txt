@@ -1,6 +1,0 @@
-import { LogReceiver } from "log-to-route";
-
-export async function POST(req: Request) {
-  const res = await LogReceiver(req);
-  return new Response(await res.text(), { status: res.status });
-}
