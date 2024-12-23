@@ -49,8 +49,11 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
 ## Getting Started
 
 ### Prerequisites
-
-To use the logger you're app must be using NextJS version 14+ with the App router
+<ul>
+  <li>NextJS v14+</li>
+  <li>Using the app router</li>
+  <li>TypeScript</li>
+</ul>
 
 ### Installation
 
@@ -62,7 +65,7 @@ To use the logger you're app must be using NextJS version 14+ with the App route
   ```sh
   yarn i log-2-route
   ```
-Create a new route (/app/logger/route.ts) using this code
+Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find it in the repossitory under the <code>/route</code> directory.
 
 ```typescript
 import { LogReceiver, altChalk } from "log-2-route";
