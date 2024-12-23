@@ -11,12 +11,6 @@
     <br/>
     <div> Track events, debug issues, and keep an eye on performance all in one place! Inspired by other loggers, you can output to either file or console, or both
     using Newline delimited JSON (<a href="https://github.com/ndjson/ndjson-spec">https://github.com/ndjson/ndjson-spec</a>) or a more readable and stylized format for direct viewing. Output with color as well.</div>
-    <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -34,7 +28,9 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
+    <li><a href="#configuration">Configuration</a></li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#dependencies">Dependencies</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -42,10 +38,12 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-I was looking for an easy-to-use file logger for my Next.js apps, suitable for both development and production, without the need to deploy to Vercel. I tried several popular solutions, but none of them worked for my use case, so of course I had to roll my own.
+
+I was looking for an easy-to-use file logger for my Next.js apps, suitable for both development and production, without the need to deploy to Vercel. I tried several popular solutions, but none of them worked well for my use cases, so of course I had to roll my own.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- GETTING STARTED -->
+
 ## Getting Started
 
 ### Prerequisites
@@ -54,6 +52,7 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
   <li>Using the app router</li>
   <li>TypeScript</li>
 </ul>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation
 
@@ -65,7 +64,9 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
   ```sh
   yarn i log-2-route
   ```
-Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find it in the repository under the <code>/route/router.ts</code> directory.
+<br/>
+  
+Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find a <code>route.ts</code> file in the repository under the <code>/route/router.ts</code> directory.
 ```typescript
 import { LogReceiver, altChalk } from "log-2-route";
 import { promises as fs } from "fs";
@@ -110,28 +111,80 @@ export async function GET(req: Request) {
 }
 
 ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Usage
+
+Importing
+```
+import { logger } from 'log-2-route'
+```
+
+Logging
+```
+logger.info("messsage")
+logger.error("message")
+logger.success("message")
+logger.debug("message")
+logger.warn("message", level)
+```
+
+Output
+
+<ul>
+  <li>Formatted</li>
+</ul>
+
+```
+[12/23/2024, 7:40:59 AM] INFO - User Rudy Schneider logged in
+```
+
+<ul>
+  <li>ndjson</li>
+</ul>
+
+```
+{"type":"info","time":{"locale":"12/23/2024, 7:45:20 AM","epoch":1734957920354},"data":{"message":"User Rudy Schneider logged in"}}
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Configuration
+
+There's a <code>l2r.config.json</code> file in the root of the app. It will check to see if it's valid or missing, and will default back to a hard coded configuration if the file is bad or missing. 
+```json
+{
+    "logFile": {
+      "format": "ndjson", or "formatted"
+      "enabled": true, or false
+      "fileName": "app.log",
+      "location": "./",
+      "timeType": "epoch", or "locale"
+      "colorizeStyledLog": true, or false
+    },
+    "console": {
+      "format": "ndjson", or "formatted"
+      "enabled": true, or false
+      "timeType": "epoch", or "locale"
+      "colorizeStyledLog": true, or false
+    }
+  }
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Dependencies
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- LICENSE -->
 ## License
 
 Distributed under the MIT. See `LICENSE.txt` for more information.
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
-<!-- CONTACT -->
 ## Contact
 
 Nathan Schneider - nlschneider@gmail.com
 
 GitHub: [[https://github.com/nathanlschneider/log-2-route](https://github.com/nathanlschneider/log-2-route)]<br/>
 NPM:    [[https://github.com/nathanlschneider/log-2-route](https://github.com/nathanlschneider/log-2-route)]<br/>
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
