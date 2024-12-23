@@ -42,6 +42,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+I was looking for an easy-to-use file logger for my Next.js apps, suitable for both development and production, without the need to deploy to Vercel. I tried several popular solutions, but none of them worked for my use case, so of course I had to roll my own.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
