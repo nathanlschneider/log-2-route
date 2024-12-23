@@ -2,9 +2,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/nathanlschneider/log-to-route">
-    <img src="https://github.com/user-attachments/assets/8293bfb8-d265-44c7-9f48-dea64a2686fa" alt="Logo" width="155" height="66">
+    <img src="https://github.com/user-attachments/assets/16c7f17e-26c6-4fd1-a266-bf22e90d0e48" alt="Logo" width="188.77" height="94.3">
   </a>
-
 <h3 align="center">Log2Route</h3>
 
   <p align="center">
