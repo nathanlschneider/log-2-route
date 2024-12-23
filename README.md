@@ -65,8 +65,7 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
   ```sh
   yarn i log-2-route
   ```
-Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find it in the repossitory under the <code>/route</code> directory.
-
+Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find it in the repository under the <code>/route</code> directory.
 ```typescript
 import { LogReceiver, altChalk } from "log-2-route";
 import { promises as fs } from "fs";
@@ -111,10 +110,6 @@ export async function GET(req: Request) {
 }
 
 ```
-
-
-
-
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
