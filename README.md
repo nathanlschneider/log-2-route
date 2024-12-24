@@ -79,7 +79,7 @@ let configFileContentStr: string;
 
 async function loadConfig() {
   try {
-    configFileContentStr = await fs.readFile(`${configFilePath}/ltr.config.json`, "utf-8");
+    configFileContentStr = await fs.readFile(`${configFilePath}/l2r.config.json`, "utf-8");
     return JSON.parse(configFileContentStr);
   } catch (error) {
     console.error(ansi.red(`Failed to read config file: ${(error as Error).message}`));
