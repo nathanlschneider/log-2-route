@@ -2,10 +2,9 @@
 <br />
 <div align="center">
   <a href="https://github.com/nathanlschneider/log-2-route">
-    <img src="https://github.com/user-attachments/assets/16c7f17e-26c6-4fd1-a266-bf22e90d0e48" alt="Logo" width="188.77" height="94.3">
+    <img src="https://github.com/user-attachments/assets/795e4e5f-926b-4c44-ae68-8e1c6d1ba6f7" alt="Logo" width="188.77" height="94.3">
   </a>
 <h3 align="center">Log2Route</h3>
-
   <p align="center">
     <strong>Front and back end Logging for Next.js Apps</strong>
     <br/>
