@@ -9,10 +9,9 @@ import {
 } from '../src/types/types';
 import defaultConfig from './utils/defaultConfig';
 import timeNow from './utils/timeNow';
-import { altChalk, colorMap } from './utils/altChalk';
 import { log, getConfigContents } from './utils/dataCom';
-
-export { altChalk };
+import { colorMap } from './utils/colorMap';
+import ansi from 'micro-ansi';
 export { ConfigShape}
 
 export const logger = {
@@ -105,13 +104,13 @@ export async function LogReceiver(req: Request): Promise<Response> {
       colorize: boolean,
       timeType: string
     ): string => {
-      const eventType = (colorMap[body.type] || altChalk.green)(
+      const eventType = (colorMap[body.type] || ansi.green)(
         body.type.toUpperCase()
       );
       const localeParts = body.time.locale.split(', ');
-      const colorizedLocaleStr = `[${altChalk.cyan(
+      const colorizedLocaleStr = `[${ansi.cyan(
         localeParts[0]
-      )}, ${altChalk.cyan(localeParts[1])}] ${eventType} - ${
+      )}, ${ansi.cyan(localeParts[1])}] ${eventType} - ${
         'message' in body.data ? body.data.message : ''
       }`;
       const formattedLocaleStr = `[${
@@ -119,7 +118,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
       }] ${body.type.toUpperCase()} - ${
         'message' in body.data ? body.data.message : ''
       }`;
-      const colorizedEpochStr = `[${altChalk.cyan(
+      const colorizedEpochStr = `[${ansi.cyan(
         body.time.epoch.toString()
       )}] ${eventType} - ${'message' in body.data ? body.data.message : ''}`;
       const formattedEpochStr = `[${

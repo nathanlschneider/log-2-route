@@ -68,7 +68,8 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
   
 Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find a <code>route.ts</code> file in the repository under the <code>/route/router.ts</code> directory.
 ```typescript
-import { LogReceiver, altChalk } from "log-2-route";
+import { LogReceiver } from "log-2-route";
+import { ansi } from "micro-ansi";
 import { promises as fs } from "fs";
 
 type ResJsonType = { logData: string; error?: string };
@@ -81,7 +82,7 @@ async function loadConfig() {
     configFileContentStr = await fs.readFile(`${configFilePath}/ltr.config.json`, "utf-8");
     return JSON.parse(configFileContentStr);
   } catch (error) {
-    console.error(altChalk.red(`Failed to read config file: ${(error as Error).message}`));
+    console.error(ansi.red(`Failed to read config file: ${(error as Error).message}`));
     throw new Error("Configuration file read error");
   }
 }
@@ -94,14 +95,14 @@ export async function POST(req: Request): Promise<Response> {
     const resJson: ResJsonType = await res.json();
 
     if (resJson.error) {
-      console.error(altChalk.red(resJson.error));
+      console.error(ansi.red(resJson.error));
       return new Response(resJson.error, { status: 400 });
     } else {
       await fs.appendFile(`${configFilePath}/${configFileContentJson.logFile.fileName}`, resJson.logData);
       return new Response("Log data appended successfully", { status: 200 });
     }
   } catch (error) {
-    console.error(altChalk.red(`Failed to process request: ${(error as Error).message}`));
+    console.error(ansi.red(`Failed to process request: ${(error as Error).message}`));
     return new Response("Internal Server Error", { status: 500 });
   }
 }
