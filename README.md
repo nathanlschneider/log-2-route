@@ -187,5 +187,5 @@ Distributed under the MIT. See `LICENSE.txt` for more information.
 Nathan Schneider - nlschneider@gmail.com
 
 GitHub: [[https://github.com/nathanlschneider/log-2-route](https://github.com/nathanlschneider/log-2-route)]<br/>
-NPM:    [[https://github.com/nathanlschneider/log-2-route](https://github.com/nathanlschneider/log-2-route)]<br/>
+NPM:    [[https://www.npmjs.com/package/log-2-route](https://www.npmjs.com/package/log-2-route)]<br/>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
