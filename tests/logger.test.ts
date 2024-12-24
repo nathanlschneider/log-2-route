@@ -14,11 +14,11 @@ describe('logger', () => {
 
   describe('error', () => {
     it('should log error with valid string message', async () => {
-      await logger.error('Test error message', { data: "doot"}, 12345, null);
+      await logger.error('Test error message', { data: "doot"}, 12345, null, undefined);
       expect(log).toHaveBeenCalledWith({
         type: 'error',
         time: expect.any(Object),
-        data: { message: 'Test error message data doot 12345 null' },
+        data: { message: 'Test error message data doot 12345 null undefined' },
       });
     });
   });
