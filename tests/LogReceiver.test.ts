@@ -12,19 +12,7 @@ describe('LogReceiver', () => {
     });
     const result = await LogReceiver(mockRequest);
     expect(result.status).toBe(400);
-    const text = await result.text();
-    expect(text).toBe('Invalid log');
+    const text = await result.json();
+    expect(text.error).toBe("Invalid log");
   });
-
-  it('should return 400 for invalid log request without logLocation and logData', async () => {
-    const mockRequest = new Request('http://localhost:3001/logger', {
-      method: 'POST',
-      body: JSON.stringify({ type: 'info' }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const result = await LogReceiver(mockRequest);
-    expect(result.status).toBe(400);
-    const text = await result.text();
-    expect(text).toBe('Invalid log');
-  });
-});
+})

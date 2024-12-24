@@ -14,11 +14,11 @@ describe('logger', () => {
 
   describe('error', () => {
     it('should log error with valid string message', async () => {
-      await logger.error('Test error message');
+      await logger.error('Test error message', { data: "doot"}, 12345, null);
       expect(log).toHaveBeenCalledWith({
         type: 'error',
         time: expect.any(Object),
-        data: { message: 'Test error message' },
+        data: { message: 'Test error message data doot 12345 null' },
       });
     });
   });
@@ -58,11 +58,11 @@ describe('logger', () => {
 
   describe('warn', () => {
     it('should log warn with valid string message and level', async () => {
-      await logger.warn('Test warn message', 1);
+      await logger.warn('Test warn message', { data: "doot"});
       expect(log).toHaveBeenCalledWith({
         type: 'warn',
         time: expect.any(Object),
-        data: { message: 'Test warn message', level: 1 },
+        data: { message: 'Test warn message data doot' },
       });
     });
   });

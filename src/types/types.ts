@@ -4,34 +4,35 @@ export type TimeShape = {
 };
 
 export type ErrorShape = {
-  message?: string;
-  level?: number;
+  message: string;
 };
 
 export type InfoShape = {
-  message?: string;
-  level?: number;
+  message: string;
 };
 
 export type SuccessShape = {
-  message?: string;
-  level?: number;
+  message: string;
 };
 
 export type DebugShape = {
-  message?: string;
-  level?: number;
+  message: string;
 };
 
 export type WarnShape = {
-  message?: string;
-  level?: number;
+  message: string;
 };
 
 export type BodyShape = {
   type: 'error' | 'info' | 'debug' | 'warn' | 'success';
   time: { locale: string; epoch: number };
-  data: InfoShape  | ErrorShape | DebugShape | WarnShape | SuccessShape | TimeShape;
+  data:
+    | InfoShape
+    | ErrorShape
+    | DebugShape
+    | WarnShape
+    | SuccessShape
+    | TimeShape;
 };
 
 export type ConfigShape = {

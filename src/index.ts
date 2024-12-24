@@ -12,11 +12,12 @@ import timeNow from './utils/timeNow';
 import { log, getConfigContents } from './utils/dataCom';
 import { colorMap } from './utils/colorMap';
 import ansi from 'micro-ansi';
+import combineMessage from './utils/combineMessage';
 export { ConfigShape}
 
 export const logger = {
-  error: async function (message: string) {
-    const loggedError: ErrorShape = { message: message };
+  error: async function (...args: any[]) {
+    const loggedError: ErrorShape = { message: combineMessage(...args) };
     try {
       await log({ type: 'error', time: timeNow(), data: loggedError });
     } catch (err) {
@@ -24,8 +25,8 @@ export const logger = {
     }
   },
 
-  info: async function (message: string) {
-    const loggedInfo: InfoShape = { message: message };
+  info: async function (...args: any[]) {
+    const loggedInfo: InfoShape = { message: combineMessage(...args) };
     try {
       await log({ type: 'info', time: timeNow(), data: loggedInfo });
     } catch (err) {
@@ -33,8 +34,8 @@ export const logger = {
     }
   },
 
-  success: async function (message: string) {
-    const loggedSuccess: SuccessShape = { message: message };
+  success: async function (...args: any[]) {
+    const loggedSuccess: SuccessShape = { message: combineMessage(...args) };
     try {
       await log({ type: 'success', time: timeNow(), data: loggedSuccess });
     } catch (err) {
@@ -42,8 +43,8 @@ export const logger = {
     }
   },
 
-  debug: async function (message: string) {
-    const loggedDebug: DebugShape = { message: message };
+  debug: async function (...args: any[]) {
+    const loggedDebug: DebugShape = { message: combineMessage(...args) };
     try {
       await log({ type: 'debug', time: timeNow(), data: loggedDebug });
     } catch (err) {
@@ -51,8 +52,8 @@ export const logger = {
     }
   },
 
-  warn: async function (message: string, level: number) {
-    const loggedWarn: WarnShape = { message: message, level: level };
+  warn: async function (...args: any[]) {
+    const loggedWarn: WarnShape = { message: combineMessage(...args) };
     try {
       await log({ type: 'warn', time: timeNow(), data: loggedWarn });
     } catch (err) {
