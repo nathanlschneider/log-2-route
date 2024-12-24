@@ -1,4 +1,4 @@
-import { LogReceiver } from "log-2-route";
+import { LogReceiver, logger } from "log-2-route";
 import ansi from "micro-ansi";
 import { promises as fs } from "fs";
 
@@ -12,7 +12,7 @@ async function loadConfig() {
     configFileContentStr = await fs.readFile(`${configFilePath}/l2r.config.json`, "utf-8");
     return JSON.parse(configFileContentStr);
   } catch (error) {
-    console.error(ansi.red(`Failed to read config file: ${(error as Error).message}`));
+   console.log(ansi.red(`Failed to read config file: ${(error as Error).message}`));
     throw new Error("Configuration file read error");
   }
 }
@@ -25,14 +25,14 @@ export async function POST(req: Request): Promise<Response> {
     const resJson: ResJsonType = await res.json();
 
     if (resJson.error) {
-      console.error(ansi.red(resJson.error));
+      console.log(ansi.red(resJson.error));
       return new Response(resJson.error, { status: 400 });
     } else {
-      await fs.appendFile(`${configFilePath}/${configFileContentJson.logFile.fileName}`, resJson.logData);
+      await fs.appendFile(`${configFilePath}/${configFileContentJson.logFile.fileName}`, resJson.logData + "\n");
       return new Response("Log data appended successfully", { status: 200 });
     }
   } catch (error) {
-    console.error(ansi.red(`Failed to process request: ${(error as Error).message}`));
+   console.log(ansi.red(`Failed to process request: ${(error as Error).message}`));
     return new Response("Internal Server Error", { status: 500 });
   }
 }
