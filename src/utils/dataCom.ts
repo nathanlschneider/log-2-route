@@ -1,6 +1,4 @@
 import { BodyShape } from "src/types/types";
-import fetch from 'node-fetch-cache';
-
 
 const log = async (data: BodyShape) => {
     try {
