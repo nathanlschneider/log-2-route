@@ -1,6 +1,5 @@
 export type TimeShape = {
-  locale: string;
-  epoch: number;
+  time: number;
 };
 
 export type ErrorShape = {
@@ -25,7 +24,7 @@ export type WarnShape = {
 
 export type BodyShape = {
   type: 'error' | 'info' | 'debug' | 'warn' | 'success';
-  time: { locale: string; epoch: number };
+  time: number | string;
   data:
     | InfoShape
     | ErrorShape
@@ -36,24 +35,22 @@ export type BodyShape = {
 };
 
 export type ConfigShape = {
+  serverOptions: {
+    port: number;
+    host: string;
+  };
   logFile: {
     format: 'styled' | 'ndjson';
     enabled: boolean;
     fileName: string;
     location: string;
-    timeType: 'locale' | 'epoch';
+    timeType: 'locale' | 'epoch' | 'timestamp';
     colorizeStyledLog: boolean;
   };
   console: {
     format: 'styled' | 'ndjson';
     enabled: boolean;
-    timeType: 'locale' | 'epoch';
+    timeType: 'locale' | 'epoch' | 'timestamp';
     colorizeStyledLog: boolean;
   };
-};
-
-export type BodyConfig = {
-  type: string;
-  time: { locale: string; epoch: number };
-  data: InfoShape;
 };

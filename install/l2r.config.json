@@ -1,10 +1,4 @@
-import { ConfigShape } from '../types/types';
-
-const defaultConfig: ConfigShape = {
-  "serverOptions": {
-    "port": 3001,
-    "host": "localhost"
-  },
+{
   "logFile": {
     "format": "ndjson",
     "enabled": true,
@@ -20,4 +14,3 @@ const defaultConfig: ConfigShape = {
     "colorizeStyledLog": true
   }
 }
-export default defaultConfig;
