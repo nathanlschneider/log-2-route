@@ -8,8 +8,8 @@ const serverConfig = {
   },
   production: {
     serverOptions: {
-      port: 80,
-      host: 'stashpig.com',
+      port: 3001,
+      host: 'localhost',
     },
   },
 };

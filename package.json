@@ -5,9 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "bin": {
-    "log2route-install": "./install.js"
-  },
+  "install": "./config.js",
   "files": [
     "dist"
   ],
