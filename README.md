@@ -72,16 +72,14 @@ node ./node_modules/log-2-route/dist/config
 The config script will perform a few tasks
 
 <ol>
-<li>Setup server config for development and production servers.</ul>
+<li>Setup server config for <code>development</code> and <code>production</code> servers.</ul>
 <li>Create the new <code>/app/logger/route.ts</code> endpoint.</ul>
-<li>Create a new l2f.config.json file in the root of the app.</ul>
+<li>Create a new <code>l2f.config.json</code> file in the root of the app.</ul>
 <ol>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Configuration
-
-There will be a l2r.config.json created in the root of your app.
 
 ```json
 {
@@ -102,7 +100,7 @@ There will be a l2r.config.json created in the root of your app.
   }
 ```
 
-logFile
+Logfile Options
 
 <ul>
   <li>format: "ndjson" or "styled"</li>
@@ -113,7 +111,7 @@ logFile
   <li>colorizeStyledLog: true or false</li>
 </ul>
 
-console
+Console Options
 
 <ul>
   <li>format: "ndjson" or "styled"</li>
@@ -153,6 +151,8 @@ catch(e) {
   logger.debug((e instanceOf Error).stack);
 }
 ```
+*Logger.debug() will only output to the logfile.
+
 
 ```typescript
 logger.success('User has done a thing!');
