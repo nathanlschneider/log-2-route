@@ -59,10 +59,6 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
   ```sh
   npm i log-2-route
   ```
-* yarn
-  ```sh
-  yarn i log-2-route
-  ```
 <br/>
   
 Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find a <code>route.ts</code> file in the repository under the <code>/route/router.ts</code> directory.
@@ -127,7 +123,7 @@ logger.info("messsage")
 logger.error("message")
 logger.success("message")
 logger.debug("message")
-logger.warn("message", level)
+logger.warn("message")
 ```
 
 Output
@@ -145,32 +141,55 @@ Output
 </ul>
 
 ```
-{"type":"info","time":{"locale":"12/23/2024, 7:45:20 AM","epoch":1734957920354},"data":{"message":"User Rudy Schneider logged in"}}
+{"type":"info","time":{"epoch":1734957920354},"data":{"message":"User Rudy Schneider logged in"}}
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Configuration
 
-There's a <code>l2r.config.json</code> file in the root of the app. It will check to see if it's valid or missing, and will default back to a hard coded configuration if the file is bad or missing. 
+There's a <code>l2r.config.json</code> file. Copy this into the root of your app. 
 ```json
 {
     "logFile": {
-      "format": "ndjson", or "formatted"
-      "enabled": true, or false
+      "format": "ndjson",
+      "enabled": true,
       "fileName": "app.log",
       "location": "./",
-      "timeType": "epoch", or "locale"
-      "colorizeStyledLog": true, or false
+      "timeType": "epoch",
+      "colorizeStyledLog": false
     },
     "console": {
-      "format": "ndjson", or "formatted"
-      "enabled": true, or false
-      "timeType": "epoch", or "locale"
-      "colorizeStyledLog": true, or false
+      "format": "styled",
+      "enabled": true
+      "timeType": "epoch",
+      "colorizeStyledLog": true
     }
   }
 ```
+logFile
+<ul>
+  <li>format: "ndjson" or "styled"</li>
+  <li>enabled: true or false</li>
+  <li>fileName: whatever you want the log file to be named.</li>
+  <li>location: whever you want the log file to live.</li>
+  <li>timeType: "epoch" or "locale" or "timestamp"</li>
+  <li>colorizeStyledLog: true or false</li>
+</ul>
+
+console
+<ul>
+  <li>format: "ndjson" or "styled"</li>
+  <li>enabled: true or false (console logs are turned off in production enviroments)</li>
+  <li>timeType: "epoch" or "locale" or "timestamp"</li>
+  <li>colorizeStyledLog: true or false</li>
+</ul>
+
+.env Files
+```env
+L2R_SERVER_URL=<your server address>
+```
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Dependencies
