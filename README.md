@@ -54,69 +54,22 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation
-  ```node
+  ```npm
   npm i log-2-route; node ./node_modules/log-2-route/dist/config
   ```
 <br/>
   
-Create a new route (<code>/app/logger/route.ts</code>) using this code. You can also find a <code>route.ts</code> file in the repository under the <code>/route/router.ts</code> directory.
-```typescript
-import { LogReceiver, logger } from "log-2-route";
-import ansi from "micro-ansi";
-import { promises as fs } from "fs";
-
-type ResJsonType = { logData: string; error?: string };
-
-const configFilePath = process.cwd();
-let configFileContentStr: string;
-
-async function loadConfig() {
-  try {
-    configFileContentStr = await fs.readFile(`${configFilePath}/l2r.config.json`, "utf-8");
-    return JSON.parse(configFileContentStr);
-  } catch (error) {
-   console.log(ansi.red(`Failed to read config file: ${(error as Error).message}`));
-    throw new Error("Configuration file read error");
-  }
-}
-
-const configFileContentJson = await loadConfig();
-
-export async function POST(req: Request): Promise<Response> {
-  try {
-    const res = await LogReceiver(req);
-    const resJson: ResJsonType = await res.json();
-
-    if (resJson.error) {
-      console.log(ansi.red(resJson.error));
-      return new Response(resJson.error, { status: 400 });
-    } else {
-      await fs.appendFile(`${configFilePath}/${configFileContentJson.logFile.fileName}`, resJson.logData + "\n");
-      return new Response("Log data appended successfully", { status: 200 });
-    }
-  } catch (error) {
-   console.log(ansi.red(`Failed to process request: ${(error as Error).message}`));
-    return new Response("Internal Server Error", { status: 500 });
-  }
-}
-
-export async function GET(req: Request) {
-  return new Response(configFileContentStr, { status: 200 });
-}
-
-
-```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
 
 Importing
-```
+```typescript
 import { logger } from 'log-2-route'
 ```
 
 Logging
-```
+```typescript
 logger.info("messsage")
 logger.error("message")
 logger.success("message")
@@ -130,7 +83,7 @@ Output
   <li>Formatted</li>
 </ul>
 
-```
+```log
 [12/23/2024, 7:40:59 AM] INFO - User Rudy Schneider logged in
 ```
 
@@ -138,15 +91,15 @@ Output
   <li>ndjson</li>
 </ul>
 
-```
+```log
 {"type":"info","time":{"epoch":1734957920354},"data":{"message":"User Rudy Schneider logged in"}}
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Configuration
+ There will be a l2r.config.json created in the root of your app.
 
-There's a <code>l2r.config.json</code> file. Copy this into the root of your app. 
 ```json
 {
     "logFile": {
@@ -183,14 +136,6 @@ console
   <li>colorizeStyledLog: true or false</li>
 </ul>
 
-.env Files
-```env
-L2R_SERVER_URL=<your server address>
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Dependencies
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
