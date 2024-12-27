@@ -54,9 +54,14 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Installation
+Install
   ```bash
-  npm i log-2-route; node ./node_modules/log-2-route/dist/config
-  ```  
+  $ npm i log-2-route@latest
+  ``` 
+Configure
+```bash
+$ node ./node_modules/log-2-route/dist/config
+```
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Usage
