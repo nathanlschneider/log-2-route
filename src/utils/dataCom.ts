@@ -1,10 +1,14 @@
 import { BodyShape } from 'src/types/types';
 import serverConfig from 'src/config/serverConfig';
+const serverUrl =
+  process.env.NODE_ENV === 'production'
+    ? serverConfig.production
+    : serverConfig.development;
 
 const log = async (data: BodyShape) => {
   try {
     await fetch(
-      `http://${serverConfig.development.serverOptions.host}:${serverConfig.development.serverOptions.port}/logger`,
+      `http://${serverUrl.serverOptions.host}:${serverUrl.serverOptions.port}/logger`,
       {
         method: 'POST',
         headers: {
@@ -18,10 +22,10 @@ const log = async (data: BodyShape) => {
   }
 };
 
-async function getConfigContents() {
+async function getConfigContents(): Promise<any> {
   try {
     const res = await fetch(
-      `http://${serverConfig.development.serverOptions.host}:${serverConfig.development.serverOptions.port}/logger`,
+      `http://${serverUrl.serverOptions.host}:${serverUrl.serverOptions.port}/logger`,
       {
         method: 'GET',
         headers: {
@@ -30,11 +34,16 @@ async function getConfigContents() {
       }
     );
 
-    const json = await res.json();
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
 
+    const json = await res.json();
     return json;
   } catch (err) {
     console.error(err);
+    return {};
   }
 }
+
 export { log, getConfigContents };
