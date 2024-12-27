@@ -90,7 +90,7 @@ Logger can take multiple arguments and argument types
 ```typescript
 logger.info("User logged in", { level: 1 }, 12345)
 ```
-And log
+And if set to styled will log
 ```typescript
 [7378237287] - INFO - User logged in level: 1
 ```
