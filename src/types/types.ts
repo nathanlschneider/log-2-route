@@ -54,3 +54,26 @@ export type ConfigShape = {
     colorizeStyledLog: boolean;
   };
 };
+
+export type ServerConfigShape = {
+  serverOptions: { port: number; host: string };
+};
+export interface LoggerConfig {
+  logFile: {
+    enabled: boolean;
+    format: string;
+    colorizeStyledLog: boolean;
+    timeType: string;
+  };
+  console: {
+    enabled: boolean;
+    format: string;
+    colorizeStyledLog: boolean;
+    timeType: string;
+  };
+}
+
+export interface Send {
+  logData: string;
+  error: string;
+}

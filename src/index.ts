@@ -4,6 +4,7 @@ import {
   DebugShape,
   ErrorShape,
   InfoShape,
+  Send,
   SuccessShape,
   WarnShape,
 } from '../src/types/types';
@@ -67,28 +68,11 @@ export const logger = {
 };
 
 export async function LogReceiver(req: Request): Promise<Response> {
-  let loggerConfig: {
-    logFile: {
-      enabled: boolean;
-      format: string;
-      colorizeStyledLog: boolean;
-      timeType: string;
-    };
-    console: {
-      enabled: boolean;
-      format: string;
-      colorizeStyledLog: boolean;
-      timeType: string;
-    };
-  };
-  let send = { logData: '', error: '' };
-
-  const configFileContent = await getConfigContents();
-
-  if (configFileContent === '') {
-    loggerConfig = defaultConfig;
-  } else {
-    loggerConfig = configFileContent as {
+  try {
+    if (!req) {
+      throw new Error('Request object is missing');
+    }
+    let loggerConfig: {
       logFile: {
         enabled: boolean;
         format: string;
@@ -102,17 +86,36 @@ export async function LogReceiver(req: Request): Promise<Response> {
         timeType: string;
       };
     };
-  }
+    let send:Send = { logData: '', error: '' };
 
-  const body: BodyShape = await req.json();
+    const configFileContent = await getConfigContents();
 
-  if (!body.type || !body.data) {
-    return new Response(JSON.stringify({ error: 'Invalid log' }), {
-      status: 400,
-    });
-  }
+    if (configFileContent === '') {
+      loggerConfig = defaultConfig;
+    } else {
+      loggerConfig = configFileContent as {
+        logFile: {
+          enabled: boolean;
+          format: string;
+          colorizeStyledLog: boolean;
+          timeType: string;
+        };
+        console: {
+          enabled: boolean;
+          format: string;
+          colorizeStyledLog: boolean;
+          timeType: string;
+        };
+      };
+    }
 
-  try {
+    const body: BodyShape = await req.json();
+
+    if (!body.type || !body.data) {
+      return new Response(JSON.stringify({ error: 'Invalid log' }), {
+        status: 400,
+      });
+    }
     const logData = (
       body: BodyShape,
       format: string,
@@ -203,9 +206,10 @@ export async function LogReceiver(req: Request): Promise<Response> {
 
     return new Response(JSON.stringify(send), {
       status: 200,
-      statusText: 'Ok',
+      statusText: 'OK',
     });
   } catch (error) {
+    console.error('Error occurred in LogReceiver:', error);
     return new Response(
       JSON.stringify({ status: 500, error: (error as Error).message }),
       { status: 500 }

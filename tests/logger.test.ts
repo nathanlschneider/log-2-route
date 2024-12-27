@@ -17,7 +17,7 @@ describe('logger', () => {
       await logger.error('Test error message', { data: "doot"}, 12345, null, undefined);
       expect(log).toHaveBeenCalledWith({
         type: 'error',
-        time: expect.any(Object),
+        time: expect.any(Number),
         data: { message: 'Test error message data doot 12345 null undefined' },
       });
     });
@@ -28,7 +28,7 @@ describe('logger', () => {
       await logger.info('Test info message');
       expect(log).toHaveBeenCalledWith({
         type: 'info',
-        time: expect.any(Object),
+        time: expect.any(Number),
         data: { message: 'Test info message' },
       });
     });
@@ -39,7 +39,7 @@ describe('logger', () => {
       await logger.success('Test success message');
       expect(log).toHaveBeenCalledWith({
         type: 'success',
-        time: expect.any(Object),
+        time: expect.any(Number),
         data: { message: 'Test success message' },
       });
     });
@@ -50,7 +50,7 @@ describe('logger', () => {
       await logger.debug('Test debug message');
       expect(log).toHaveBeenCalledWith({
         type: 'debug',
-        time: expect.any(Object),
+        time: expect.any(Number),
         data: { message: 'Test debug message' },
       });
     });
@@ -61,7 +61,7 @@ describe('logger', () => {
       await logger.warn('Test warn message', { data: "doot"});
       expect(log).toHaveBeenCalledWith({
         type: 'warn',
-        time: expect.any(Object),
+        time: expect.any(Number),
         data: { message: 'Test warn message data doot' },
       });
     });
