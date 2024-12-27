@@ -73,6 +73,27 @@ logger.success("message")
 logger.debug("message")
 logger.warn("message")
 ```
+Example
+```typescript
+try {
+  // codes...
+}
+catch(e) {
+  logger.error((e instanceOf Error).message);
+  logger.debug((e instanceOf Error).stack);
+}
+```
+```typescript
+logger.success("User has done a thing!");
+```
+Logger can take multiple arguments and argument types
+```typescript
+logger.info("User logged in", { level: 1 }, 12345)
+```
+And log
+```typescript
+[7378237287] - INFO - User logged in level: 1
+```
 
 Output
 <ul>
