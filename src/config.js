@@ -62,7 +62,7 @@ const serverConfig = {
 export default serverConfig;
 `;
 
-  const configPath = path.join(process.cwd(), 'node_modules/log-2-route/dist/serverConfig.ts');
+  const configPath = path.join(process.cwd(), 'node_modules/log-2-route/src/config/serverConfig.ts');
   fs.writeFile(configPath, configContent, (err) => {
     if (err) {
       console.error('Error writing to file:', err);
@@ -77,7 +77,7 @@ export default serverConfig;
     console.log('Created /app/logger route');
   }
 
-  const sourceRouteFile = path.join(process.cwd(), '/node_modules/log-2-route/dist/route.ts');
+  const sourceRouteFile = path.join(process.cwd(), '/node_modules/log-2-route/install/route.ts');
   const destinationRouteFile = path.join(loggerRoutePath, 'route.ts');
   fs.copyFile(sourceRouteFile, destinationRouteFile, (err) => {
     if (err) {
@@ -87,7 +87,7 @@ export default serverConfig;
     }
   });
 
-  const sourceConfigFile = path.join(process.cwd(), '/node_modules/log-2-route/dist/l2r.config.json');
+  const sourceConfigFile = path.join(process.cwd(), '/node_modules/log-2-route/install/l2r.config.json');
   const destinationConfigFile = path.join(process.cwd(), 'l2r.config.json');
   fs.copyFile(sourceConfigFile, destinationConfigFile, (err) => {
     if (err) {
