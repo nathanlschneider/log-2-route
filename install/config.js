@@ -62,7 +62,7 @@ const serverConfig = {
 export default serverConfig;
 `;
 
-  const configPath = path.join(process.cwd(), 'node_modules/log-2-route/src/config/serverConfig.ts');
+  const configPath = path.join(process.cwd(), 'node_modules/log-2-route/dist/src/config/serverConfig.js');
   fs.writeFile(configPath, configContent, (err) => {
     if (err) {
       console.error('Error writing to file:', err);
