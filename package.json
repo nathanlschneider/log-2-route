@@ -5,9 +5,8 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "install": "./config.js",
   "files": [
-    "dist"
+    "dist", "install"
   ],
   "scripts": {
     "build": "tsup",
