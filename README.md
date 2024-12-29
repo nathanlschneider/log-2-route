@@ -41,6 +41,20 @@ Install
 npm i log-2-route
 ```
 
+Configure
+
+```bash
+node ./node_modules/log-2-route/install/config
+```
+
+The config script will perform a few tasks
+
+<ol>
+<li>Setup server config for <code>development</code> and <code>production</code> servers.</ul>
+<li>Create the new <code>/app/logger/route.ts</code> endpoint.</ul>
+<li>Create a new <code>l2f.config.json</code> file in the root of the app.</ul>
+</ol>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Configuration
