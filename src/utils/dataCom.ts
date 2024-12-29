@@ -1,5 +1,5 @@
-import { BodyShape } from 'src/types/types';
-import serverConfig from 'src/config/serverConfig';
+import { BodyShape } from '../types/types';
+import serverConfig from '../config/serverConfig';
 const serverUrl =
   process.env.NODE_ENV === 'production'
     ? serverConfig.production
