@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "@typesFiles/*": ["src/typesFiles/*"],
+      "@l2rTypes/*": ["src/l2rTypes/*"],
       "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"]
     }

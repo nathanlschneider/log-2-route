@@ -1,4 +1,4 @@
-import {
+import type {
   BodyShape,
   ConfigShape,
   DebugShape,
@@ -7,7 +7,7 @@ import {
   Send,
   SuccessShape,
   WarnShape,
-} from '@typesFiles/types';
+} from '@l2rTypes/l2rTypes';
 import defaultConfig from '@utils/defaultConfig';
 import { log, getConfigContents } from '@utils/dataCom';
 import { colorMap } from '@utils/colorMap';
@@ -86,7 +86,7 @@ export async function LogReceiver(req: Request): Promise<Response> {
         timeType: string;
       };
     };
-    let send:Send = { logData: '', error: '' };
+    let send: Send = { logData: '', error: '' };
 
     const configFileContent = await getConfigContents();
 
