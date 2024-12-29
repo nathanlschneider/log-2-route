@@ -7,8 +7,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "install",
-    "src/config"
+    "install"
   ],
   "scripts": {
     "build": "tsup",
