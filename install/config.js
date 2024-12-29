@@ -1,15 +1,14 @@
-#! /usr/bin/env node
-
 const fs = require('fs');
 const readline = require('readline');
 const path = require('path');
+const chalk = require('chalk');
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-console.log(`
+console.log(chalk.greenBright(`
   _                 ___  _____             _       
  | |               |__ \\|  __ \\           | |      
  | |     ___   __ _   ) | |__) |___  _   _| |_ ___ 
@@ -18,26 +17,34 @@ console.log(`
  |______\\___/ \\__, |____|_|  \\_\\___/ \\__,_|\\__\\___|
                __/ |                               
               |___/
-`);
+`));
 
-console.log('Log 2 Route Configuration Creator');
+console.log(chalk.blueBright('Log-2-Route Configuration Creator\n'));
 
 const askQuestion = (question, defaultValue) => {
-  return new Promise((resolve) => {
-    rl.question(`${question} (default: ${defaultValue}): `, (answer) => {
-      resolve(answer || defaultValue);
+  return new Promise((resolve, reject) => {
+    rl.question(`${question} (default: ${chalk.gray(defaultValue)}): `, (answer) => {
+      if (answer.trim() === '') {
+        resolve(defaultValue);
+      } else {
+        resolve(answer);
+      }
     });
   });
 };
 
 const askForConfig = async (env) => {
-  const hostname = await askQuestion(`Please enter the ${env} server hostname`, 'localhost');
-  const port = await askQuestion(`Please enter the ${env} server port`, '3000');
-  if (isNaN(port)) {
-    console.log('Port must be a number. Please try again.');
-    return askForConfig(env);
+  try {
+    const hostname = await askQuestion(`Please enter the ${env} server hostname`, 'localhost');
+    const port = await askQuestion(`Please enter the ${env} server port`, '3000');
+    if (isNaN(port)) {
+      throw new Error('Port must be a number');
+    }
+    return { hostname, port };
+  } catch (error) {
+    console.error(chalk.red(`Error: ${error.message}`));
+    process.exit(1);
   }
-  return { hostname, port };
 };
 
 const main = async () => {
@@ -65,23 +72,31 @@ export default serverConfig;
   const configPath = path.join(process.cwd(), 'node_modules/log-2-route/src/config/serverConfig.ts');
   fs.writeFile(configPath, configContent, (err) => {
     if (err) {
-      console.error('Error writing to file:', err);
+      console.error(chalk.red('\nError writing to file!'), (err instanceof Error) ? err.message : err);
+      process.exit(1);
     } else {
-      console.log('Server configurations saved');
+      console.log(chalk.green('Server configurations saved'));
     }
   });
 
-  const loggerRoutePath = path.join(process.cwd(), 'app/logger');
+  const appPath = path.join(process.cwd(), 'app');
+  if (!fs.existsSync(appPath)) {
+    console.error(chalk.red('\nError: /app directory does not exist.'));
+    process.exit(1);
+  }
+
+  const loggerRoutePath = path.join(appPath, 'logger');
   if (!fs.existsSync(loggerRoutePath)) {
     fs.mkdirSync(loggerRoutePath, { recursive: true });
-    console.log('Created /app/logger route');
+    console.log(chalk.green('Created /app/logger route'));
   }
 
   const sourceRouteFile = path.join(process.cwd(), '/node_modules/log-2-route/install/route.ts');
   const destinationRouteFile = path.join(loggerRoutePath, 'route.ts');
   fs.copyFile(sourceRouteFile, destinationRouteFile, (err) => {
     if (err) {
-      console.error('Error copying route file:', err);
+      console.error(chalk.red('\nError copying route file!'),(err instanceof Error) ? err.message : err);
+      process.exit(1);
     } else {
       console.log('Copied install/route.ts to /app/logger/route.ts');
     }
@@ -91,7 +106,8 @@ export default serverConfig;
   const destinationConfigFile = path.join(process.cwd(), 'l2r.config.json');
   fs.copyFile(sourceConfigFile, destinationConfigFile, (err) => {
     if (err) {
-      console.error('Error copying config file:', err);
+      console.error(chalk.red('\nError copying config file!'),(err instanceof Error) ? err.message : err);
+      process.exit(1);
     } else {
       console.log('Copied install/l2r.config.json to ' + process.cwd());
     }

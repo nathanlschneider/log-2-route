@@ -38,13 +38,13 @@ I was looking for an easy-to-use file logger for my Next.js apps, suitable for b
 Install
 
 ```bash
-npm i log-2-route@latest
+npm i log-2-route
 ```
 
 Configure
 
 ```bash
-node ./node_modules/log-2-route/dist/config
+node ./node_modules/log-2-route/install/config
 ```
 
 The config script will perform a few tasks
@@ -129,7 +129,7 @@ catch(e) {
   logger.debug((e instanceOf Error).stack);
 }
 ```
-*Logger.debug() will only output to the logfile.
+*logger.debug() will only output to the logfile.
 
 
 ```typescript
