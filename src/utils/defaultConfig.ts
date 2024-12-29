@@ -1,4 +1,4 @@
-import type { ConfigShape }  from "@l2rTypes/l2rTypes";
+import type { ConfigShape }  from "../l2rTypes/l2rTypes";
 
 const defaultConfig: ConfigShape = {
   logFile: {

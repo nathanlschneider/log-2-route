@@ -9,7 +9,7 @@ const serverConfig = {
   production: {
     serverOptions: {
       port: 3001,
-      host: 'localhost',
+      host: 'stashpig.com',
     },
   },
 };

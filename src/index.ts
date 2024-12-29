@@ -7,13 +7,12 @@ import type {
   Send,
   SuccessShape,
   WarnShape,
-} from '@l2rTypes/l2rTypes';
+} from './l2rTypes/l2rTypes';
 import defaultConfig from './utils/defaultConfig';
 import { log, getConfigContents } from './utils/dataCom';
 import { colorMap } from './utils/colorMap';
 import ansi from 'micro-ansi';
 import combineMessage from './utils/combineMessage';
-export { ConfigShape };
 
 export const logger = {
   error: async function (...args: any[]) {
