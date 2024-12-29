@@ -1,5 +1,5 @@
 import type { BodyShape } from '@l2rTypes/l2rTypes';
-import serverConfig from '@config/serverConfig';
+import serverConfig from '../config/serverConfig';
 const serverUrl =
   process.env.NODE_ENV === 'production'
     ? serverConfig.production

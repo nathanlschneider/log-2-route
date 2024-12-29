@@ -1,5 +1,5 @@
 import type { ConfigShape } from '@l2rTypes/l2rTypes';
-import flattenJSON from '@utils/flattenJSON';
+import flattenJSON from './flattenJSON';
 
 export default async function validateConfigShape(
   config: ConfigShape,
