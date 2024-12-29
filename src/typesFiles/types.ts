@@ -35,10 +35,6 @@ export type BodyShape = {
 };
 
 export type ConfigShape = {
-  serverOptions: {
-    port: number;
-    host: string;
-  };
   logFile: {
     format: 'styled' | 'ndjson';
     enabled: boolean;

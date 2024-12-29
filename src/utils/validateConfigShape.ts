@@ -1,5 +1,5 @@
-import { ConfigShape } from '../types/types';
-import flattenJSON from './flattenJSON';
+import { ConfigShape } from '@typesFiles/types';
+import flattenJSON from '@utils/flattenJSON';
 
 export default async function validateConfigShape(
   config: ConfigShape,
