@@ -1,6 +1,6 @@
 {
   "name": "log-2-route",
-  "version": "1.8.9",
+  "version": "1.8.10",
   "description": "Logger for NextJS that uses the app router to enable logging from anywhere in your app and beyond.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
