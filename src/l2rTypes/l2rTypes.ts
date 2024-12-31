@@ -40,13 +40,13 @@ export type ConfigShape = {
     enabled: boolean;
     fileName: string;
     location: string;
-    timeType: 'locale' | 'epoch' | 'timestamp';
+    timeType: 'locale' | 'epoch' | 'timestamp' | 'none';
     colorizeStyledLog: boolean;
   };
   console: {
     format: 'styled' | 'ndjson';
     enabled: boolean;
-    timeType: 'locale' | 'epoch' | 'timestamp';
+    timeType: 'locale' | 'epoch' | 'timestamp' | 'none';
     colorizeStyledLog: boolean;
   };
 };
@@ -73,3 +73,10 @@ export interface Send {
   logData: string;
   error: string;
 }
+
+export type LogDataShape = {
+  body: BodyShape;
+  format: string;
+  colorize: boolean;
+  timeType: string;
+};
