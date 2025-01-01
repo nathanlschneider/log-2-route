@@ -125,8 +125,8 @@ function formatLogData(
       )}] ${eventType} ${message}`;
       break;
     case 'none':
-      formattedStr = `[${body.type.toUpperCase()}] ${message}`;
-      colorizedStr = `[${eventType}] ${message}`;
+      formattedStr = `${body.type.toUpperCase()} ${message}`;
+      colorizedStr = `${eventType} ${message}`;
       break;
     default:
       throw new Error('Invalid timeType');
@@ -170,7 +170,7 @@ function handleConsoleLog(body: BodyShape, loggerConfig: ConfigShape): void {
     process.env.NODE_ENV === 'development'
   ) {
     console.log(
-      formatLogData(
+      " " + formatLogData(
         {
           body,
           format: loggerConfig.console.format.toLowerCase(),
