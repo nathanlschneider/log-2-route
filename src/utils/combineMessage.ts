@@ -13,9 +13,7 @@ const combineMessage = (...args: any[]): string => {
           return (arg as Error).message;
         }
         return arg === null ? 'null' : 
-        Object.entries(arg)
-        .join(' ')
-        .replaceAll(',', ' ');
+       JSON.stringify(arg);
       case 'function':
         return arg.toString();
       case 'undefined':

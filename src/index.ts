@@ -95,7 +95,7 @@ function formatLogData(
   const eventType = (colorMap[body.type] || ansi.green)(
     body.type.toUpperCase()
   );
-  const message = 'message' in body.data ? body.data.message : '';
+  const message = 'msg' in body.data ? body.data.msg : '';
 
   let formattedStr = '';
   let colorizedStr = '';
@@ -170,7 +170,7 @@ function handleConsoleLog(body: BodyShape, loggerConfig: ConfigShape): void {
     process.env.NODE_ENV === 'development'
   ) {
     console.log(
-      " " + formatLogData(
+      formatLogData(
         {
           body,
           format: loggerConfig.console.format.toLowerCase(),
