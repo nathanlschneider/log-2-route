@@ -3,23 +3,23 @@ export type TimeShape = {
 };
 
 export type ErrorShape = {
-  message: string;
+  msg: string;
 };
 
 export type InfoShape = {
-  message: string;
+  msg: string;
 };
 
 export type SuccessShape = {
-  message: string;
+  msg: string;
 };
 
 export type DebugShape = {
-  message: string;
+  msg: string;
 };
 
 export type WarnShape = {
-  message: string;
+  msg: string;
 };
 
 export type BodyShape = {

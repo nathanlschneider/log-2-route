@@ -12,7 +12,7 @@ import combineMessage from './utils/combineMessage';
 
 export const logger = {
   error:  function (...args: any[]) {
-    const loggedError = { message: combineMessage(...args) };
+    const loggedError = { msg: combineMessage(...args) };
     try {
       log({ type: 'error', time: Date.now(), data: loggedError });
     } catch (err) {
@@ -22,7 +22,7 @@ export const logger = {
   },
 
   info: function (...args: any[]) {
-    const loggedInfo = { message: combineMessage(...args) };
+    const loggedInfo = { msg: combineMessage(...args) };
     try {
        log({ type: 'info', time: Date.now(), data: loggedInfo });
     } catch (err) {
@@ -32,7 +32,7 @@ export const logger = {
   },
 
   success: function (...args: any[]) {
-    const loggedSuccess = { message: combineMessage(...args) };
+    const loggedSuccess = { msg: combineMessage(...args) };
     try {
        log({ type: 'success', time: Date.now(), data: loggedSuccess });
     } catch (err) {
@@ -42,7 +42,7 @@ export const logger = {
   },
 
   debug: function (...args: any[]) {
-    const loggedDebug = { message: combineMessage(...args) };
+    const loggedDebug = { msg: combineMessage(...args) };
     try {
     log({ type: 'debug', time: Date.now(), data: loggedDebug });
     } catch (err) {
@@ -52,7 +52,7 @@ export const logger = {
   },
 
   warn: function (...args: any[]) {
-    const loggedWarn = { message: combineMessage(...args) };
+    const loggedWarn = { msg: combineMessage(...args) };
     try {
      log({ type: 'warn', time: Date.now(), data: loggedWarn });
     } catch (err) {
@@ -125,8 +125,8 @@ function formatLogData(
       )}] ${eventType} ${message}`;
       break;
     case 'none':
-      formattedStr = `${body.type.toUpperCase()} ${message}`;
-      colorizedStr = `${eventType} ${message}`;
+      formattedStr = ` ${body.type.toUpperCase()} ${message}`;
+      colorizedStr = ` ${eventType} ${message}`;
       break;
     default:
       throw new Error('Invalid timeType');
