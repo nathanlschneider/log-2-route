@@ -6,6 +6,11 @@ const serverUrl =
     : serverConfig.development;
 
 const log = async (data: BodyShape) => {
+  console.log(
+    `//${serverUrl.serverOptions.host}:${
+      window.location.port || serverUrl.serverOptions.port
+    }/logger`
+  );
   try {
     await fetch(
       `//${serverUrl.serverOptions.host}:${window.location.port || serverUrl.serverOptions.port}/logger`,
