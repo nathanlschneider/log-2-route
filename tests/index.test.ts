@@ -1,79 +1,79 @@
-import { logger } from '../src/index';
-import { log } from '../src/utils/dataCom';
+import { logger } from "../src/index";
+import { log } from "../src/utils/dataCom";
 
-jest.mock('../src/utils/dataCom', () => ({
+jest.mock("../src/utils/dataCom", () => ({
   log: jest.fn(),
 }));
 
-describe('logger', () => {
+describe("logger", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should log error messages', async () => {
-    const errorMessage = 'This is an error';
-    await logger.error(errorMessage);
+  it("should log error messages", async () => {
+    const errorMessage = "This is an error";
+    logger.error(errorMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'error',
+      type: "error",
       time: expect.any(Number),
-      data: { message: errorMessage },
+      data: { msg: errorMessage },
     });
   });
 
-  it('should log info messages', async () => {
-    const infoMessage = 'This is an info';
-    await logger.info(infoMessage);
+  it("should log info messages", async () => {
+    const infoMessage = "This is an info";
+    logger.info(infoMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'info',
+      type: "info",
       time: expect.any(Number),
-      data: { message: infoMessage },
+      data: { msg: infoMessage },
     });
   });
 
-  it('should log success messages', async () => {
-    const successMessage = 'This is a success';
-    await logger.success(successMessage);
+  it("should log success messages", async () => {
+    const successMessage = "This is a success";
+    logger.success(successMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'success',
+      type: "success",
       time: expect.any(Number),
-      data: { message: successMessage },
+      data: { msg: successMessage },
     });
   });
 
-  it('should log debug messages', async () => {
-    const debugMessage = 'This is a debug';
-    await logger.debug(debugMessage);
+  it("should log debug messages", async () => {
+    const debugMessage = "This is a debug";
+    logger.debug(debugMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'debug',
+      type: "debug",
       time: expect.any(Number),
-      data: { message: debugMessage },
+      data: { msg: debugMessage },
     });
   });
 
-  it('should log warn messages', async () => {
-    const warnMessage = 'This is a warn';
-    await logger.warn(warnMessage);
+  it("should log warn messages", async () => {
+    const warnMessage = "This is a warn";
+    logger.warn(warnMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'warn',
+      type: "warn",
       time: expect.any(Number),
-      data: { message: warnMessage },
+      data: { msg: warnMessage },
     });
   });
 
-  it('should chain debug after error', async () => {
-    const errorMessage = 'This is an error';
-    const debugMessage = 'This is a debug';
-    await logger.error(errorMessage);
-    await logger.debug(debugMessage);
+  it("should chain debug after error", async () => {
+    const errorMessage = "This is an error";
+    const debugMessage = "This is a debug";
+    logger.error(errorMessage);
+    logger.debug(debugMessage);
     expect(log).toHaveBeenCalledWith({
-      type: 'error',
+      type: "error",
       time: expect.any(Number),
-      data: { message: errorMessage },
+      data: { msg: errorMessage },
     });
     expect(log).toHaveBeenCalledWith({
-      type: 'debug',
+      type: "debug",
       time: expect.any(Number),
-      data: { message: debugMessage },
+      data: { msg: debugMessage },
     });
   });
 });
