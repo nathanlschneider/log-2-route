@@ -142,8 +142,10 @@ Logger can take multiple arguments and argument types
 logger.info('User logged in', { level: 1 }, 12345);
 ```
 
+You must wrap the logger in a useEffect hook when using client side
+
 ```typescript
-useEffect(()=> logger.info("Logged."), [logger])
+useEffect(()=> logger.info("Logged."), [])
 ```
 
 And if set to styled will log
@@ -151,8 +153,6 @@ And if set to styled will log
 ```typescript
 [7378237287] INFO - User logged in level: 1
 ```
-
-You must wrap the logger in a useEffect hook when using client side
 
 
 Output

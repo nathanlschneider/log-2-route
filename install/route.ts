@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { LogReceiver, logger } from "log-2-route";
+import { LogReceiver } from "log-2-route";
 import ansi from "micro-ansi";
 import { promises as fs } from "fs";
 
@@ -39,6 +39,6 @@ export async function POST(req: Request): Promise<Response> {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   return new Response(configFileContentStr, { status: 200 });
 }

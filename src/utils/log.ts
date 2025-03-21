@@ -8,7 +8,7 @@ const serverUrl =
 const log = async (data: BodyShape) => {
   try {
     await fetch(
-      `http://${serverUrl.serverOptions.host}:${serverUrl.serverOptions.port}/logger`,
+      `//${serverUrl.serverOptions.host}:${window.location.port || serverUrl.serverOptions.port}/logger`,
       {
         method: 'POST',
         headers: {
