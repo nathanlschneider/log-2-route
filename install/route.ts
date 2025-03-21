@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { LogReceiver } from "log-2-route";
 import ansi from "micro-ansi";
 import { promises as fs } from "fs";
