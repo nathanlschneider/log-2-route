@@ -1,23 +1,15 @@
-import type { BodyShape } from '../l2rTypes/l2rTypes';
-import serverConfig from '../config/serverConfig';
-const serverUrl =
-  process.env.NODE_ENV === 'production'
-    ? serverConfig.production
-    : serverConfig.development;
-
+import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
- 
+  const location = window !== undefined ? window.location.href : "localhost:3000";
+
   try {
-    await fetch(
-      `//${serverUrl.serverOptions.host}/logger`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    await fetch(`//${location}/logger`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
   } catch (err) {
     console.error(err);
   }

@@ -1,3 +1,4 @@
+
 import { LogReceiver } from "log-2-route";
 import ansi from "micro-ansi";
 import { promises as fs } from "fs";
@@ -17,9 +18,10 @@ async function loadConfig() {
   }
 }
 
-const configFileContentJson = await loadConfig();
 
 export async function POST(req: Request): Promise<Response> {
+  const configFileContentJson = await loadConfig();
+
   try {
     const res = await LogReceiver(req);
     const resJson: ResJsonType = await res.json();
