@@ -28,7 +28,7 @@ export async function POST(req: Request): Promise<Response> {
       console.log(ansi.red(resJson.error));
       return new Response(resJson.error, { status: 400 });
     } else {
-      await fs.mkdir(`${configFilePath}/${configFileContentJson.logFile.location}`, { recursive: true }, (e)=>console.log(e));
+      await fs.mkdir(`${configFilePath}/${configFileContentJson.logFile.location}`, { recursive: true });
       await fs.appendFile(`${configFilePath}/${configFileContentJson.logFile.location}/${configFileContentJson.logFile.fileName}`, resJson.logData + "\n");
       return new Response("Log data appended successfully", { status: 200 });
     }
