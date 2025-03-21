@@ -5,6 +5,7 @@ const CACHE_KEY = "loggerConfig";
 
 export default async function getConfigContents(): Promise<any> {
   const location = window !== undefined ? window.location.href : "localhost:3000";
+  console.log(location)
 
   const cachedData = cache.get(CACHE_KEY);
   if (cachedData) {
