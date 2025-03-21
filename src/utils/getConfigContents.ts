@@ -18,7 +18,7 @@ export default async function getConfigContents(): Promise<any> {
 
   try {
     const res = await fetch(
-      `http://${serverUrl.serverOptions.host}:${serverUrl.serverOptions.port}/logger`,
+      `//${serverUrl.serverOptions.host}/logger`,
       {
         method: 'GET',
         headers: {
