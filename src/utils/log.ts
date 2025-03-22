@@ -1,10 +1,9 @@
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
-  const location = typeof window !== "undefined" ? window.location.href : "localhost:3000";
-  console.log(location)
+  const location = typeof window !== "undefined" ? window.location.href : "//localhost:3000/";
 
   try {
-    await fetch(`//${location}/logger`, {
+    await fetch(`${location}logger`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
