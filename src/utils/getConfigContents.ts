@@ -7,7 +7,7 @@ export default async function getConfigContents(): Promise<any> {
     const location =
       typeof window !== "undefined"
         ? window.location.href
-        : "//localhost:3000/";
+        : "http://localhost:3000/";
 
 
   const cachedData = cache.get(CACHE_KEY);
@@ -16,7 +16,7 @@ export default async function getConfigContents(): Promise<any> {
   }
 
   try {
-    const res = await fetch(`//${location}/logger`, {
+    const res = await fetch(`${location}logger`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
