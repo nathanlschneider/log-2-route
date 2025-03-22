@@ -9,6 +9,10 @@ import { log, getConfigContents } from './utils/dataCom';
 import { colorMap } from './utils/colorMap';
 import ansi from 'micro-ansi';
 import combineMessage from './utils/combineMessage';
+import catchAll from './utils/catchAll';
+
+catchAll();
+
 
 export const logger = {
   error:  function (...args: any[]) {
