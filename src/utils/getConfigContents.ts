@@ -4,8 +4,8 @@ const cache = new NodeCache({ stdTTL: 86400, checkperiod: 3600 });
 const CACHE_KEY = "loggerConfig";
 
 export default async function getConfigContents(): Promise<any> {
-  const location = window !== undefined ? window.location.href : "localhost:3000";
-  console.log(location)
+  const location =
+    typeof window !== "undefined" ? window.location.href : "localhost:3000";
 
   const cachedData = cache.get(CACHE_KEY);
   if (cachedData) {
