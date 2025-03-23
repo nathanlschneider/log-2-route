@@ -12,9 +12,8 @@ import combineMessage from './utils/combineMessage';
 
 export const logger = {
   error:  function (...args: any[]) {
-    const loggedError = { msg: combineMessage(...args) };
     try {
-      log({ type: 'error', time: Date.now(), data: loggedError });
+      log({ type: "error", time: Date.now(), msg: combineMessage(...args) });
     } catch (err) {
       console.error('Failed to log error:', err);
     }
@@ -22,9 +21,8 @@ export const logger = {
   },
 
   info: function (...args: any[]) {
-    const loggedInfo = { msg: combineMessage(...args) };
     try {
-       log({ type: 'info', time: Date.now(), data: loggedInfo });
+       log({ type: "info", time: Date.now(), msg: combineMessage(...args) });
     } catch (err) {
       console.error('Failed to log info:', err);
     }
@@ -32,9 +30,8 @@ export const logger = {
   },
 
   success: function (...args: any[]) {
-    const loggedSuccess = { msg: combineMessage(...args) };
     try {
-       log({ type: 'success', time: Date.now(), data: loggedSuccess });
+       log({ type: "success", time: Date.now(), msg: combineMessage(...args) });
     } catch (err) {
       console.error('Failed to log success:', err);
     }
@@ -42,9 +39,8 @@ export const logger = {
   },
 
   debug: function (...args: any[]) {
-    const loggedDebug = { msg: combineMessage(...args) };
     try {
-    log({ type: 'debug', time: Date.now(), data: loggedDebug });
+      log({ type: 'debug', time: Date.now(), msg: combineMessage(...args) });
     } catch (err) {
       console.error('Failed to log debug:', err);
     }
@@ -52,9 +48,8 @@ export const logger = {
   },
 
   warn: function (...args: any[]) {
-    const loggedWarn = { msg: combineMessage(...args) };
     try {
-     log({ type: 'warn', time: Date.now(), data: loggedWarn });
+      log({ type: 'warn', time: Date.now(), msg: combineMessage(...args) });
     } catch (err) {
       console.error('Failed to log warn:', err);
     }
@@ -82,7 +77,7 @@ export function validateRequest(req: Request): void {
 
 async function parseRequestBody(req: Request): Promise<BodyShape> {
   const body: BodyShape = await req.json();
-  if (!body.type || !body.data) {
+  if (!body.type || !body.msg) {
     throw new Error('Invalid log');
   }
   return body;
@@ -95,7 +90,7 @@ function formatLogData(
   const eventType = (colorMap[body.type] || ansi.green)(
     body.type.toUpperCase()
   );
-  const message = 'msg' in body.data ? body.data.msg : '';
+  const message = body.msg;
 
   let formattedStr = '';
   let colorizedStr = '';

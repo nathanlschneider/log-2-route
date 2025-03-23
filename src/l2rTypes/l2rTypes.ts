@@ -25,13 +25,7 @@ export type WarnShape = {
 export type BodyShape = {
   type: 'error' | 'info' | 'debug' | 'warn' | 'success';
   time: number | string;
-  data:
-    | InfoShape
-    | ErrorShape
-    | DebugShape
-    | WarnShape
-    | SuccessShape
-    | TimeShape;
+  msg: any;
 };
 
 export type ConfigShape = {
