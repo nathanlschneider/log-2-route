@@ -38,10 +38,6 @@ fs.copyFile(sourceRouteFile, destinationRouteFile, (err) => {
 });
 
 const wellKnownDir = path.join(loggerRoutePath, ".well-known");
-const sourceFile = path.resolve(
-  __dirname,
-  "src/api/.well-known/your-service.ts"
-);
 
 if (!fs.existsSync(wellKnownDir)) {
   console.log(`Creating the directory: ${wellKnownDir}`);
