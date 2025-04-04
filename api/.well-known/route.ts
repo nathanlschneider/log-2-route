@@ -1,19 +1,21 @@
-// src/api/.well-known/your-service.ts
-
 import { NextResponse } from "next/server";
-
 export async function POST(req: Request) {
   const { callbackUrl, siteId, userId, token } = await req.json();
 
+  console.log({
+    callbackUrl: callbackUrl,
+    siteId: siteId,
+    userId: userId,
+    token: token,
+  });
+
   try {
-    // Your logic to verify the JWT and forward the data to the callback URL
     console.log("Verification request received:", { siteId, userId, token });
 
-    // Send a request to the callback URL to continue the verification process
     const response = await fetch(callbackUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ siteId, userId, token }),
+      body: JSON.stringify({ siteId, userId, token, callbackUrl }),
     });
 
     if (!response.ok) {
