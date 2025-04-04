@@ -14,7 +14,8 @@
   "scripts": {
     "build": "tsup",
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "postinstall": "node postinstall.js"
   },
   "repository": {
     "type": "git",
