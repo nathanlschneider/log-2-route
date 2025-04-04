@@ -7,7 +7,9 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "install"
+    "install",
+    "api/.well-known/your-service.ts",
+    "src/handleVerification.ts"
   ],
   "scripts": {
     "build": "tsup",
@@ -42,6 +44,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "jsonwebtoken": "^9.0.2",
     "micro-ansi": "^1.4.1",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.2"
