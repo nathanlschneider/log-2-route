@@ -9,7 +9,8 @@
     "dist",
     "install",
     "api/.well-known/your-service.ts",
-    "src/handleVerification.ts"
+    "src/handleVerification.ts",
+    "src/postinstall.js"
   ],
   "scripts": {
     "build": "tsup",
