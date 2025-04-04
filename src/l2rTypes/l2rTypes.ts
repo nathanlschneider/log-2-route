@@ -32,8 +32,6 @@ export type ConfigShape = {
   logFile: {
     format: 'styled' | 'ndjson';
     enabled: boolean;
-    fileName: string;
-    location: string;
     timeType: 'locale' | 'epoch' | 'timestamp' | 'none';
     colorizeStyledLog: boolean;
   };

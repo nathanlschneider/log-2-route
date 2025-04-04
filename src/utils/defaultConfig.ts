@@ -4,8 +4,6 @@ const defaultConfig: ConfigShape = {
   logFile: {
     format: 'ndjson',
     enabled: true,
-    fileName: 'l2r.log',
-    location: './',
     timeType: 'timestamp',
     colorizeStyledLog: false,
   },
