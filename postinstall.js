@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
 
-const mainAppPath = path.dirname(require.main.filename);
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const mainAppPath = dirname(fileURLToPath(import.meta.url));
 
 const appPath = mainAppPath.split("/node_modules/")[0];
 
