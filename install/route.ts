@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import { LogReceiver } from "log-2-route";
 import { promises as fs } from "fs";
 

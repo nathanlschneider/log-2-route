@@ -1,3 +1,4 @@
+// @ts-expect-error
 import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { callbackUrl, siteId, userId, token } = await req.json();
