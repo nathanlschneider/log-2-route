@@ -44,13 +44,13 @@ if (!fs.existsSync(wellKnownDir)) {
   fs.mkdirSync(wellKnownDir, { recursive: true });
 }
 
-if (fs.existsSync(path.join(wellKnownDir, "your-service.ts"))) {
+if (fs.existsSync(path.join(wellKnownDir, "route.ts"))) {
   console.log("API route already exists. Skipping copy.");
 } else {
   console.log(`Copying API route to ${wellKnownDir}`);
   fs.copyFileSync(
-    appPath + "/node_modules/log-2-route/api/.well-known/your-service.ts",
-    path.join(wellKnownDir, "your-service.ts")
+    appPath + "/node_modules/log-2-route/api/.well-known/route.ts",
+    path.join(wellKnownDir, "route.ts")
   );
 }
 
