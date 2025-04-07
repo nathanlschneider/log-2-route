@@ -21,7 +21,7 @@ if (!fs.existsSync(loggerRoutePath)) {
 
 const sourceRouteFile = path.join(
   appPath,
-  "/node_modules/log-2-route/install/route.ts"
+  "/node_modules/error-aware_client/install/route.ts"
 );
 const destinationRouteFile = path.join(loggerRoutePath, "route.ts");
 
@@ -49,7 +49,7 @@ if (fs.existsSync(path.join(wellKnownDir, "route.ts"))) {
 } else {
   console.log(`Copying API route to ${wellKnownDir}`);
   fs.copyFileSync(
-    appPath + "/node_modules/log-2-route/api/.well-known/route.ts",
+    appPath + "/node_modules/error-aware_client/api/.well-known/route.ts",
     path.join(wellKnownDir, "route.ts")
   );
 }

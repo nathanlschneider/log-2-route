@@ -1,32 +1,32 @@
-import { NextResponse } from "next/server";
-export async function POST(req: Request) {
-  const { callbackUrl, siteId, userId, token } = await req.json();
+import { NextRequest, NextResponse } from "next/server";
+import { PUBLIC_KEY_PEM } from "./public-key";
+import * as crypto from "crypto";
 
-  console.log({
-    callbackUrl: callbackUrl,
-    siteId: siteId,
-    userId: userId,
-    token: token,
-  });
-
+function verifySignature(payload: any, signature: string): boolean {
   try {
-    console.log("Verification request received:", { siteId, userId, token });
-
-    const response = await fetch(callbackUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ siteId, userId, token, callbackUrl }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Callback verification failed");
-    }
-
-    return NextResponse.json({
-      message: "Verification request successfully processed",
-    });
-  } catch (err) {
-    console.error("Error:", err);
-    return NextResponse.json({ error: "Verification failed" }, { status: 500 });
+    const data = JSON.stringify(payload);
+    const sigBuffer = Buffer.from(signature, "base64");
+    return crypto.verify(null, Buffer.from(data), PUBLIC_KEY_PEM, sigBuffer);
+  } catch {
+    return false;
   }
 }
+
+export async function POST(req: NextRequest) {
+  const { payload, signature } = await req.json();
+
+  if (!payload || !signature) {
+    return NextResponse.json(
+      { error: "Missing payload or signature" },
+      { status: 400 }
+    );
+  }
+
+  if (!verifySignature(payload, signature)) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
+  }
+
+  // Now you're sure it came from your platform 🎉
+  return NextResponse.json({ success: true, received: payload });
+}
+
