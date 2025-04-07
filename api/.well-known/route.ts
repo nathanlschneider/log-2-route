@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PUBLIC_KEY_PEM } from "./public-key";
 import * as crypto from "crypto";
 
-function verifySignature(payload: {}, signature: string): boolean {
+function verifySignature(payload: object, signature: string): boolean {
   try {
     const data = JSON.stringify(payload);
     const sigBuffer = Buffer.from(signature, "base64");

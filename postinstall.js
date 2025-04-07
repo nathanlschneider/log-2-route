@@ -50,6 +50,10 @@ if (fs.existsSync(path.join(wellKnownDir, "route.ts"))) {
     appPath + "/node_modules/error-aware-client/api/.well-known/route.ts",
     path.join(wellKnownDir, "route.ts")
   );
+   fs.copyFileSync(
+     appPath + "/node_modules/error-aware-client/api/.well-known/public-key.ts",
+     path.join(wellKnownDir, "public-key.ts")
+   );
 }
 
 console.log("Post-install script completed.");
