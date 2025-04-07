@@ -9,14 +9,14 @@ const mainAppPath = dirname(fileURLToPath(import.meta.url));
 const appPath = mainAppPath.split("/node_modules/")[0];
 
 if (!fs.existsSync(appPath + "/app")) {
-  console.error(chalk.red("\nError: /app directory does not exist."));
+  console.error("\nError: /app directory does not exist.");
   process.exit(1);
 }
 
 const loggerRoutePath = path.join(appPath, "/app/logger");
 if (!fs.existsSync(loggerRoutePath)) {
   fs.mkdirSync(loggerRoutePath, { recursive: true });
-  console.log(chalk.green("Created /app/logger route"));
+  console.log("Created /app/logger route");
 }
 
 const sourceRouteFile = path.join(
@@ -27,10 +27,8 @@ const destinationRouteFile = path.join(loggerRoutePath, "route.ts");
 
 fs.copyFile(sourceRouteFile, destinationRouteFile, (err) => {
   if (err) {
-    console.error(
-      chalk.red("\nError copying route file!"),
-      err instanceof Error ? err.message : err
-    );
+    console.error("\nError copying route file!"),
+      err instanceof Error ? err.message : err;
     process.exit(1);
   } else {
     console.log("Copied install/route.ts to /app/logger/route.ts");
