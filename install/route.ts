@@ -16,9 +16,12 @@ export async function POST(req: Request): Promise<Response> {
       await fs.mkdir(`${home}/errorlogs/app`, { recursive: true });
 
       const currentDate = new Date();
-      const formattedDate = `${
-        currentDate.getMonth() + 1
-      }${currentDate.getDate()}${currentDate.getFullYear()}`;
+      const formattedDate = `${(currentDate.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}${currentDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}${currentDate.getFullYear()}`;
 
       await fs.appendFile(
         `${home}/errorlogs/app/${formattedDate}.log`,
