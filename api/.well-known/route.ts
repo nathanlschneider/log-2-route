@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PUBLIC_KEY_PEM } from "./public-key";
 import * as crypto from "crypto";
+import * as fs from "fs";
+
+
+const publicKey = fs.readFileSync("public.pem", "utf8");
 
 // Constants
-const ALLOWED_IPS = ["203.0.113.42"]; // replace with your platform's IP
+const ALLOWED_IPS = ["74.208.201.237"]; // replace with your platform's IP
 const EXPECTED_ORIGIN_HEADER = "qwerkly-platform";
 const MAX_BODY_SIZE = 1024 * 1024; // 1MB
 const TIMEOUT = 5000; // 5 seconds
@@ -68,9 +71,9 @@ function verifySignature(
     const data = JSON.stringify(payload);
     const sigBuffer = Buffer.from(signature, "base64");
     return crypto.verify(
-      "sha256", // Explicit algorithm instead of null
+      "RSA-SHA256", // Explicit algorithm instead of null
       Buffer.from(data),
-      PUBLIC_KEY_PEM,
+      publicKey,
       sigBuffer
     );
   } catch {

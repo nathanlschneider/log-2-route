@@ -52,13 +52,13 @@ if (fs.existsSync(path.join(wellKnownDir, "route.ts"))) {
   );
 }
 
-if (fs.existsSync(path.join(wellKnownDir, "public-key.ts"))) {
+if (fs.existsSync(path.join(wellKnownDir, "public.pem"))) {
   console.log("Public Key already exists. Skipping copy.");
 } else {
   console.log(`Copying Public Key to ${wellKnownDir}`);
   fs.copyFileSync(
-    appPath + "/node_modules/error-aware-client/api/.well-known/public-key.ts",
-    path.join(wellKnownDir, "public-key.ts")
+    appPath + "/node_modules/error-aware-client/api/.well-known/public.pem",
+    path.join(wellKnownDir, "public.pem")
   );
 }
 
