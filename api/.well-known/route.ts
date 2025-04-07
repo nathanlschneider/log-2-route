@@ -2,30 +2,211 @@ import { NextRequest, NextResponse } from "next/server";
 import { PUBLIC_KEY_PEM } from "./public-key";
 import * as crypto from "crypto";
 
-function verifySignature(payload: object, signature: string): boolean {
+// Constants
+const ALLOWED_IPS = ['203.0.113.42']; // replace with your platform's IP
+const EXPECTED_ORIGIN_HEADER = 'qwerkly-platform';
+const MAX_BODY_SIZE = 1024 * 1024; // 1MB
+const TIMEOUT = 5000; // 5 seconds
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_REQUESTS = 100; // Max requests per window
+
+const enum ErrorType {
+  RATE_LIMIT = "Rate limit exceeded",
+  INVALID_IP = "Unauthorized IP",
+  INVALID_PROTOCOL = "HTTPS required",
+  INVALID_ORIGIN = "Invalid origin header",
+  INVALID_SIGNATURE = "Invalid signature",
+  TIMEOUT = "Request timeout",
+  PAYLOAD_TOO_LARGE = "Request too large",
+  INVALID_JSON = "Invalid JSON payload",
+  MISSING_FIELDS = "Missing payload or signature",
+  INTERNAL_ERROR = "Internal server error",
+    INVALID_VERIFICATION = "Invalid verification token",
+  CONNECTION_ERROR = "Connection verification failed"
+}
+
+// Types
+interface RequestPayload {
+  payload: Record<string, unknown>;  // More specific type than 'unknown'
+  signature: string;
+}
+
+interface ApiResponse {
+  success?: boolean;
+  error?: string;
+  received?: Record<string, unknown>;
+  requestId: string;
+}
+
+interface VerificationPayload extends RequestPayload {
+  payload: {
+    verificationType: "connection";
+    platformId: string;
+    timestamp: number;
+  };
+}
+
+// Rate limit data structure
+const rateLimit = new Map<string, { count: number, timestamp: number }>();
+
+// Helper functions
+function verifySignature(payload: Record<string, unknown>, signature: string): boolean {
   try {
     const data = JSON.stringify(payload);
     const sigBuffer = Buffer.from(signature, "base64");
-    return crypto.verify(null, Buffer.from(data), PUBLIC_KEY_PEM, sigBuffer);
+    return crypto.verify(
+      'sha256',  // Explicit algorithm instead of null
+      Buffer.from(data),
+      PUBLIC_KEY_PEM,
+      sigBuffer
+    );
   } catch {
     return false;
   }
 }
 
+function getClientIP(req: NextRequest): string {
+  return req.headers.get("x-real-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.ip ||
+    "unknown";
+}
+
+function createErrorResponse(message: string, status: number = 403) {
+  const requestId = generateRequestId();
+  return NextResponse.json(
+    { error: message, requestId }, 
+    { 
+      status,
+      headers: { 'X-Request-ID': requestId }
+    }
+  );
+}
+
+function generateRequestId(): string {
+  return crypto.randomBytes(16).toString("hex");
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const requestData = rateLimit.get(ip);
+
+  if (!requestData || now - requestData.timestamp > RATE_LIMIT_WINDOW) {
+    rateLimit.set(ip, { count: 1, timestamp: now });
+    return true;
+  }
+
+  if (requestData.count >= MAX_REQUESTS) {
+    return false;
+  }
+
+  requestData.count++;
+  return true;
+}
+
+function verifyConnectionRequest(payload: Record<string, unknown>): boolean {
+  if (
+    payload.verificationType !== "connection" ||
+    typeof payload.platformId !== "string" ||
+    typeof payload.timestamp !== "number"
+  ) {
+    return false;
+  }
+  // Ensure timestamp is within last 5 minutes
+  const timestampAge = Date.now() - payload.timestamp;
+  return timestampAge <= 300000; // 5 minutes
+}
+
 export async function POST(req: NextRequest) {
-  const { payload, signature } = await req.json();
-
-  if (!payload || !signature) {
-    return NextResponse.json(
-      { error: "Missing payload or signature" },
-      { status: 400 }
-    );
+  // Request ID and size check
+  const requestId = generateRequestId();
+  if (req.headers.get('content-length') && 
+      parseInt(req.headers.get('content-length')!) > MAX_BODY_SIZE) {
+    return createErrorResponse("Request too large", 413);
   }
 
-  if (!verifySignature(payload, signature)) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
+  // Rate limiting
+  const ip = getClientIP(req);
+  if (!checkRateLimit(ip)) {
+    return createErrorResponse("Rate limit exceeded", 429);
   }
 
-  return NextResponse.json({ success: true, received: payload });
+  // Existing security checks
+  if (!ALLOWED_IPS.includes(ip)) {
+    return createErrorResponse("Unauthorized IP");
+  }
+
+  if (req.headers.get("x-forwarded-proto") !== "https") {
+    return createErrorResponse("HTTPS required");
+  }
+
+  if (req.headers.get("x-platform-origin") !== EXPECTED_ORIGIN_HEADER) {
+    return createErrorResponse("Invalid origin header");
+  }
+
+  // Timeout wrapper
+  try {
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(ErrorType.TIMEOUT)), TIMEOUT);
+    });
+
+    const processRequest = async (): Promise<NextResponse<ApiResponse>> => {
+      // Payload validation
+      let requestData: RequestPayload;
+      try {
+        requestData = await req.json();
+      } catch {
+        return createErrorResponse("Invalid JSON payload", 400);
+      }
+
+      const { payload, signature } = requestData;
+      if (!payload || !signature) {
+        return createErrorResponse("Missing payload or signature", 400);
+      }
+
+      if (!verifySignature(payload, signature)) {
+        return createErrorResponse("Invalid signature");
+      }
+
+      if (payload.verificationType === "connection") {
+        if (!verifyConnectionRequest(payload)) {
+          return createErrorResponse(ErrorType.INVALID_VERIFICATION, 400);
+        }
+
+        return NextResponse.json(
+          {
+            success: true,
+            verified: true,
+            platformId: payload.platformId,
+            requestId,
+          },
+          {
+            headers: {
+              "X-Request-ID": requestId,
+              "X-Verification-Time": Date.now().toString(),
+            },
+          }
+        );
+      }
+
+      // Success response
+      return NextResponse.json(
+        { success: true, received: payload, requestId },
+        { headers: { 'X-Request-ID': requestId } }
+      );
+    };
+
+    const response = await Promise.race([processRequest(), timeoutPromise]);
+    return response;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === ErrorType.TIMEOUT) {
+        return createErrorResponse(ErrorType.TIMEOUT, 408);
+      }
+      // Log the error message for debugging
+      console.error(`Request failed: ${error.message}`);
+    }
+    return createErrorResponse(ErrorType.INTERNAL_ERROR, 500);
+  }
 }
 
