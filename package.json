@@ -1,6 +1,6 @@
 {
   "name": "error-aware-client",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "Client for Next.js error logging and mitigation platform Error Aware.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
