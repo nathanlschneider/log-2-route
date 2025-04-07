@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PUBLIC_KEY_PEM } from "./public-key";
 import * as crypto from "crypto";
 
-function verifySignature(payload: any, signature: string): boolean {
+function verifySignature(payload: {}, signature: string): boolean {
   try {
     const data = JSON.stringify(payload);
     const sigBuffer = Buffer.from(signature, "base64");
@@ -26,7 +26,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
   }
 
-  // Now you're sure it came from your platform 🎉
   return NextResponse.json({ success: true, received: payload });
 }
 
