@@ -1,4 +1,4 @@
-import { LogReceiver } from "error-aware_client";
+import { LogReceiver } from "error-aware-client";
 import { promises as fs } from "fs";
 
 type ResJsonType = { logData: string; error?: string };
