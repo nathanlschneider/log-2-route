@@ -9,8 +9,10 @@
   "files": [
     "dist",
     "install",
-    "api/.well-known/your-service.ts",
-    "src/handleVerification.ts",
+    "api",
+    "api/.well-known",
+    "api/.well-known/route.ts",
+    "api/.well-known/public-key.ts",
     "postinstall.js"
   ],
   "scripts": {
