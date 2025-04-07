@@ -3,8 +3,8 @@ import { PUBLIC_KEY_PEM } from "./public-key";
 import * as crypto from "crypto";
 
 // Constants
-const ALLOWED_IPS = ['203.0.113.42']; // replace with your platform's IP
-const EXPECTED_ORIGIN_HEADER = 'qwerkly-platform';
+const ALLOWED_IPS = ["203.0.113.42"]; // replace with your platform's IP
+const EXPECTED_ORIGIN_HEADER = "qwerkly-platform";
 const MAX_BODY_SIZE = 1024 * 1024; // 1MB
 const TIMEOUT = 5000; // 5 seconds
 const RATE_LIMIT_WINDOW = 60000; // 1 minute
@@ -21,41 +21,54 @@ const enum ErrorType {
   INVALID_JSON = "Invalid JSON payload",
   MISSING_FIELDS = "Missing payload or signature",
   INTERNAL_ERROR = "Internal server error",
-    INVALID_VERIFICATION = "Invalid verification token",
-  CONNECTION_ERROR = "Connection verification failed"
+  INVALID_VERIFICATION = "Invalid verification token",
+  CONNECTION_ERROR = "Connection verification failed",
 }
 
 // Types
 interface RequestPayload {
-  payload: Record<string, unknown>;  // More specific type than 'unknown'
+  payload: Record<string, unknown>; // More specific type than 'unknown'
   signature: string;
 }
 
 interface ApiResponse {
-  success?: boolean;
+  success: boolean;  // Remove the optional modifier
   error?: string;
   received?: Record<string, unknown>;
   requestId: string;
+  timestamp?: number;  // Add timestamp for consistency
 }
 
-interface VerificationPayload extends RequestPayload {
-  payload: {
-    verificationType: "connection";
-    platformId: string;
-    timestamp: number;
-  };
+interface VerificationPayload {
+  verificationType: "connection";
+  platformId: string;
+  timestamp: number;
+}
+
+// Add type guard
+function isVerificationPayload(payload: unknown): payload is VerificationPayload {
+  return (
+    typeof payload === "object" &&
+    payload !== null &&
+    (payload as VerificationPayload).verificationType === "connection" &&
+    typeof (payload as VerificationPayload).platformId === "string" &&
+    typeof (payload as VerificationPayload).timestamp === "number"
+  );
 }
 
 // Rate limit data structure
-const rateLimit = new Map<string, { count: number, timestamp: number }>();
+const rateLimit = new Map<string, { count: number; timestamp: number }>();
 
 // Helper functions
-function verifySignature(payload: Record<string, unknown>, signature: string): boolean {
+function verifySignature(
+  payload: Record<string, unknown>,
+  signature: string
+): boolean {
   try {
     const data = JSON.stringify(payload);
     const sigBuffer = Buffer.from(signature, "base64");
     return crypto.verify(
-      'sha256',  // Explicit algorithm instead of null
+      "sha256", // Explicit algorithm instead of null
       Buffer.from(data),
       PUBLIC_KEY_PEM,
       sigBuffer
@@ -66,19 +79,21 @@ function verifySignature(payload: Record<string, unknown>, signature: string): b
 }
 
 function getClientIP(req: NextRequest): string {
-  return req.headers.get("x-real-ip") ||
+  return (
+    req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     req.ip ||
-    "unknown";
+    "unknown"
+  );
 }
 
 function createErrorResponse(message: string, status: number = 403) {
   const requestId = generateRequestId();
   return NextResponse.json(
-    { error: message, requestId }, 
-    { 
+    { error: message, requestId },
+    {
       status,
-      headers: { 'X-Request-ID': requestId }
+      headers: { "X-Request-ID": requestId },
     }
   );
 }
@@ -104,15 +119,12 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+// Update verifyConnectionRequest function
 function verifyConnectionRequest(payload: Record<string, unknown>): boolean {
-  if (
-    payload.verificationType !== "connection" ||
-    typeof payload.platformId !== "string" ||
-    typeof payload.timestamp !== "number"
-  ) {
+  if (!isVerificationPayload(payload)) {
     return false;
   }
-  // Ensure timestamp is within last 5 minutes
+  
   const timestampAge = Date.now() - payload.timestamp;
   return timestampAge <= 300000; // 5 minutes
 }
@@ -120,8 +132,10 @@ function verifyConnectionRequest(payload: Record<string, unknown>): boolean {
 export async function POST(req: NextRequest) {
   // Request ID and size check
   const requestId = generateRequestId();
-  if (req.headers.get('content-length') && 
-      parseInt(req.headers.get('content-length')!) > MAX_BODY_SIZE) {
+  if (
+    req.headers.get("content-length") &&
+    parseInt(req.headers.get("content-length")!) > MAX_BODY_SIZE
+  ) {
     return createErrorResponse("Request too large", 413);
   }
 
@@ -168,11 +182,16 @@ export async function POST(req: NextRequest) {
         return createErrorResponse("Invalid signature");
       }
 
+      // Update the verification check in POST handler
       if (payload.verificationType === "connection") {
-        if (!verifyConnectionRequest(payload)) {
+        if (!isVerificationPayload(payload)) {
           return createErrorResponse(ErrorType.INVALID_VERIFICATION, 400);
         }
-
+      
+        if (!verifyConnectionRequest(payload)) {
+          return createErrorResponse(ErrorType.CONNECTION_ERROR, 400);
+        }
+      
         return NextResponse.json(
           {
             success: true,
@@ -192,7 +211,7 @@ export async function POST(req: NextRequest) {
       // Success response
       return NextResponse.json(
         { success: true, received: payload, requestId },
-        { headers: { 'X-Request-ID': requestId } }
+        { headers: { "X-Request-ID": requestId } }
       );
     };
 
@@ -209,4 +228,3 @@ export async function POST(req: NextRequest) {
     return createErrorResponse(ErrorType.INTERNAL_ERROR, 500);
   }
 }
-
