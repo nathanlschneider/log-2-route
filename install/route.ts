@@ -40,12 +40,13 @@ export async function GET(req: Request): Promise<Response> {
   try {
     const url = new URL(req.url);
     const date = url.searchParams.get("date");
+    const type = url.searchParams.get("type")
 
     if (!date || !/^\d{8}$/.test(date)) {
       return new Response("Invalid date format. Use MMDDYYYY", { status: 400 });
     }
 
-    const logPath = `${home}/errorlogs/app/${date}.log`;
+    const logPath = `${home}/errorlogs/${type}/${date}.log`;
 
     try {
       const logContent = await fs.readFile(logPath, "utf-8");
