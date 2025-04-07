@@ -42,24 +42,18 @@ if (!fs.existsSync(wellKnownDir)) {
   fs.mkdirSync(wellKnownDir, { recursive: true });
 }
 
-if (fs.existsSync(path.join(wellKnownDir, "route.ts"))) {
-  console.log("API route already exists. Skipping copy.");
-} else {
-  console.log(`Copying API route to ${wellKnownDir}`);
-  fs.copyFileSync(
-    appPath + "/node_modules/error-aware-client/api/.well-known/route.ts",
-    path.join(wellKnownDir, "route.ts")
-  );
-}
+// Remove the existence check and always copy the API route
+console.log(`Copying API route to ${wellKnownDir}`);
+fs.copyFileSync(
+  appPath + "/node_modules/error-aware-client/api/.well-known/route.ts",
+  path.join(wellKnownDir, "route.ts")
+);
 
-if (fs.existsSync(path.join(wellKnownDir, "public.pem"))) {
-  console.log("Public Key already exists. Skipping copy.");
-} else {
-  console.log(`Copying Public Key to ${wellKnownDir}`);
-  fs.copyFileSync(
-    appPath + "/node_modules/error-aware-client/api/.well-known/public.pem",
-    path.join(wellKnownDir, "public.pem")
-  );
-}
+// Remove the existence check and always copy the Public Key
+console.log(`Copying Public Key to ${wellKnownDir}`);
+fs.copyFileSync(
+  appPath + "/node_modules/error-aware-client/api/.well-known/public.pem",
+  path.join(wellKnownDir, "public.pem")
+);
 
 console.log("Post-install script completed.");
