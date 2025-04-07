@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import * as crypto from "crypto";
 import * as fs from "fs";
 
-
-const publicKey = fs.readFileSync("public.pem", "utf8");
+const publicKey = fs.readFileSync(
+  process.cwd() + "/app/logger/.well-known/public.pem",
+  "utf8"
+);
 
 // Constants
 const ALLOWED_IPS = ["74.208.201.237"]; // replace with your platform's IP
@@ -35,11 +37,11 @@ interface RequestPayload {
 }
 
 interface ApiResponse {
-  success: boolean;  // Remove the optional modifier
+  success: boolean; // Remove the optional modifier
   error?: string;
   received?: Record<string, unknown>;
   requestId: string;
-  timestamp?: number;  // Add timestamp for consistency
+  timestamp?: number; // Add timestamp for consistency
 }
 
 interface VerificationPayload {
@@ -49,7 +51,9 @@ interface VerificationPayload {
 }
 
 // Add type guard
-function isVerificationPayload(payload: unknown): payload is VerificationPayload {
+function isVerificationPayload(
+  payload: unknown
+): payload is VerificationPayload {
   return (
     typeof payload === "object" &&
     payload !== null &&
@@ -85,7 +89,7 @@ function getClientIP(req: NextRequest): string {
   return (
     req.headers.get("x-real-ip") ||
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    req.ip ||
+    // req.ip is not available in NextRequest
     "unknown"
   );
 }
@@ -93,7 +97,7 @@ function getClientIP(req: NextRequest): string {
 function createErrorResponse(message: string, status: number = 403) {
   const requestId = generateRequestId();
   return NextResponse.json(
-    { error: message, requestId },
+    { success: false, error: message, requestId },
     {
       status,
       headers: { "X-Request-ID": requestId },
@@ -127,13 +131,14 @@ function verifyConnectionRequest(payload: Record<string, unknown>): boolean {
   if (!isVerificationPayload(payload)) {
     return false;
   }
-  
+
   const timestampAge = Date.now() - payload.timestamp;
   return timestampAge <= 300000; // 5 minutes
 }
 
 export async function POST(req: NextRequest) {
   // Request ID and size check
+
   const requestId = generateRequestId();
   if (
     req.headers.get("content-length") &&
@@ -148,10 +153,10 @@ export async function POST(req: NextRequest) {
     return createErrorResponse("Rate limit exceeded", 429);
   }
 
-  // Existing security checks
-  if (!ALLOWED_IPS.includes(ip)) {
-    return createErrorResponse("Unauthorized IP");
-  }
+  // // Existing security checks
+  // if (!ALLOWED_IPS.includes(ip)) {
+  //   return createErrorResponse("Unauthorized IP");
+  // }
 
   if (req.headers.get("x-forwarded-proto") !== "https") {
     return createErrorResponse("HTTPS required");
@@ -190,11 +195,11 @@ export async function POST(req: NextRequest) {
         if (!isVerificationPayload(payload)) {
           return createErrorResponse(ErrorType.INVALID_VERIFICATION, 400);
         }
-      
+
         if (!verifyConnectionRequest(payload)) {
           return createErrorResponse(ErrorType.CONNECTION_ERROR, 400);
         }
-      
+
         return NextResponse.json(
           {
             success: true,
