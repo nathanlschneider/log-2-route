@@ -7,6 +7,8 @@ const log = async (data: BodyShape) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "x-platform-origin": "qwerkly-platform",
+        "x-forwarded-proto": "https",
       },
       body: JSON.stringify(data),
     });
