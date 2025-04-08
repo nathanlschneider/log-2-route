@@ -202,6 +202,7 @@ export async function GET(req: NextRequest): Promise<Response> {
         }
       );
     } catch (error) {
+      console.log(error)
       return createErrorResponse("Log file not found", 404);
     }
   } catch (error) {

@@ -8,7 +8,7 @@ const publicKey = fs.readFileSync(
 );
 
 // Constants
-const ALLOWED_IPS = ["74.208.201.237"]; // replace with your platform's IP
+// const ALLOWED_IPS = ["74.208.201.237"]; // replace with your platform's IP
 const EXPECTED_ORIGIN_HEADER = "qwerkly-platform";
 const MAX_BODY_SIZE = 1024 * 1024; // 1MB
 const TIMEOUT = 5000; // 5 seconds
