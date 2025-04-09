@@ -113,12 +113,13 @@ export async function POST(req: NextRequest): Promise<Response> {
     const processRequest = async (): Promise<Response> => {
       const res = await LogReceiver(req);
       const resJson: ResJsonType = await res.json();
+      const system = JSON.parse(resJson.logData).system;
 
       if (resJson.error) {
         return createErrorResponse(resJson.error, 400);
       }
 
-      await fs.promises.mkdir(`${home}/errorlogs/app`, { recursive: true });
+      await fs.promises.mkdir(`${home}/errorlogs/${system}`, { recursive: true });
 
       const currentDate = new Date();
       const formattedDate = `${(currentDate.getMonth() + 1)
@@ -129,7 +130,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         .padStart(2, "0")}${currentDate.getFullYear()}`;
 
       await fs.promises.appendFile(
-        `${home}/errorlogs/app/${formattedDate}.log`,
+        `${home}/errorlogs/${system}/${formattedDate}.log`,
         resJson.logData + "\n"
       );
 

@@ -3,6 +3,7 @@ import type {
   ConfigShape,
   Send,
   LogDataShape,
+  LogSystem
 } from "./l2rTypes/l2rTypes";
 import defaultConfig from "./utils/defaultConfig";
 import { log } from "./utils/dataCom";
@@ -11,9 +12,19 @@ import ansi from "micro-ansi";
 import combineMessage from "./utils/combineMessage";
 
 export const logger = {
+  system: "app" as LogSystem, // default system
+  setSystem: function (system: LogSystem) {
+    this.system = system;
+    return this;
+  },
   error: function (...args: any[]) {
     try {
-      log({ type: "error", time: Date.now(), msg: combineMessage(...args) });
+      log({
+        type: "error",
+        time: Date.now(),
+        msg: combineMessage(...args),
+        system: this.system,
+      });
     } catch (err) {
       console.error("Failed to log error:", err);
     }
@@ -22,7 +33,12 @@ export const logger = {
 
   info: function (...args: any[]) {
     try {
-      log({ type: "info", time: Date.now(), msg: combineMessage(...args) });
+      log({
+        type: "info",
+        time: Date.now(),
+        msg: combineMessage(...args),
+        system: this.system,
+      });
     } catch (err) {
       console.error("Failed to log info:", err);
     }
@@ -31,7 +47,12 @@ export const logger = {
 
   success: function (...args: any[]) {
     try {
-      log({ type: "success", time: Date.now(), msg: combineMessage(...args) });
+      log({
+        type: "success",
+        time: Date.now(),
+        msg: combineMessage(...args),
+        system: this.system,
+      });
     } catch (err) {
       console.error("Failed to log success:", err);
     }
@@ -40,7 +61,12 @@ export const logger = {
 
   debug: function (...args: any[]) {
     try {
-      log({ type: "debug", time: Date.now(), msg: combineMessage(...args) });
+      log({
+        type: "debug",
+        time: Date.now(),
+        msg: combineMessage(...args),
+        system: this.system,
+      });
     } catch (err) {
       console.error("Failed to log debug:", err);
     }
@@ -49,7 +75,12 @@ export const logger = {
 
   warn: function (...args: any[]) {
     try {
-      log({ type: "warn", time: Date.now(), msg: combineMessage(...args) });
+      log({
+        type: "warn",
+        time: Date.now(),
+        msg: combineMessage(...args),
+        system: this.system,
+      });
     } catch (err) {
       console.error("Failed to log warn:", err);
     }
