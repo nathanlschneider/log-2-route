@@ -85,14 +85,14 @@ function verifySignature(
   }
 }
 
-// function getClientIP(req: NextRequest): string {
-//   return (
-//     req.headers.get("x-real-ip") ||
-//     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-//     // req.ip is not available in NextRequest
-//     "unknown"
-//   );
-// }
+function getClientIP(req: NextRequest): string {
+  return (
+    req.headers.get("x-real-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    // req.ip is not available in NextRequest
+    "unknown"
+  );
+}
 
 function createErrorResponse(message: string, status: number = 403) {
   const requestId = generateRequestId();
@@ -148,23 +148,23 @@ export async function POST(req: NextRequest) {
   }
 
   // // Rate limiting
-  // const ip = getClientIP(req);
-  // if (!checkRateLimit(ip)) {
-  //   return createErrorResponse("Rate limit exceeded", 429);
-  // }
+  const ip = getClientIP(req);
+  if (!checkRateLimit(ip)) {
+    return createErrorResponse("Rate limit exceeded", 429);
+  }
 
   // // Existing security checks
   // if (!ALLOWED_IPS.includes(ip)) {
   //   return createErrorResponse("Unauthorized IP");
   // }
 
-  // if (req.headers.get("x-forwarded-proto") !== "https") {
-  //   return createErrorResponse("HTTPS required");
-  // }
+  if (req.headers.get("x-forwarded-proto") !== "https") {
+    return createErrorResponse("HTTPS required");
+  }
 
-  // if (req.headers.get("x-platform-origin") !== EXPECTED_ORIGIN_HEADER) {
-  //   return createErrorResponse("Invalid origin header");
-  // }
+  if (req.headers.get("x-platform-origin") !== EXPECTED_ORIGIN_HEADER) {
+    return createErrorResponse("Invalid origin header");
+  }
 
   // Timeout wrapper
   try {
