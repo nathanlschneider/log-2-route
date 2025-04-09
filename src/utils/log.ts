@@ -1,10 +1,8 @@
 
-import { getCurrentDomain } from "./getCurrentDomain";
 
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
-  const domain = await getCurrentDomain();
-  
+  const domain = window && window.location.host;
   const proto = process.env.NODE_ENV === "production" ? "https" : "http";
 
   try {
