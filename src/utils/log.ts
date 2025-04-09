@@ -2,8 +2,9 @@ import { getCurrentDomain } from "./getCurrentDomain";
 
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
+  const domain = await getCurrentDomain();
   try {
-    await fetch(`https://${getCurrentDomain}`, {
+    await fetch(`https://${domain}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
