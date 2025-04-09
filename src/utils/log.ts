@@ -1,8 +1,9 @@
+import { getCurrentDomain } from "./getCurrentDomain";
+
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
-
   try {
-    await fetch(`/logger`, {
+    await fetch(`https://${getCurrentDomain}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -93,7 +93,6 @@ export function validateRequest(req: Request): void {
     throw new Error("Request object is missing");
   }
 }
-444;
 async function parseRequestBody(req: Request): Promise<BodyShape> {
   const body: BodyShape = await req.json();
   if (!body.type || !body.msg) {
