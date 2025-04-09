@@ -1,12 +1,11 @@
-
+'use server';
 
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
-  const domain = window && window.location.host;
   const proto = process.env.NODE_ENV === "production" ? "https" : "http";
 
   try {
-    await fetch(`${proto}://${domain}`, {
+    await fetch(`${proto}://localhost`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
