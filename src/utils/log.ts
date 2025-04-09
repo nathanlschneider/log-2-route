@@ -1,11 +1,8 @@
-'use server';
-
 import type { BodyShape } from "../l2rTypes/l2rTypes";
 const log = async (data: BodyShape) => {
-  const proto = process.env.NODE_ENV === "production" ? "https" : "http";
 
   try {
-    await fetch(`${proto}://localhost`, {
+    await fetch(`/logger`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
