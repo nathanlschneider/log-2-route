@@ -4,7 +4,7 @@ const log = async (data: BodyShape) => {
   // const proto = process.env.NODE_ENV === "production" ? "https" : "http";
 
   try {
-    await fetch(`http://localhost:${window.location.port}/logger`, {
+    await fetch(`${window.location.origin}/logger`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
