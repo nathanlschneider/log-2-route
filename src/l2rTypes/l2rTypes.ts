@@ -23,22 +23,23 @@ export type WarnShape = {
 };
 
 export type BodyShape = {
-  type: 'error' | 'info' | 'debug' | 'warn' | 'success';
+  type: "error" | "info" | "debug" | "warn" | "success";
   time: number | string;
   msg: any;
+  system: LogSystem;
 };
 
 export type ConfigShape = {
   logFile: {
-    format: 'styled' | 'ndjson';
+    format: "styled" | "ndjson";
     enabled: boolean;
-    timeType: 'locale' | 'epoch' | 'timestamp' | 'none';
+    timeType: "locale" | "epoch" | "timestamp" | "none";
     colorizeStyledLog: boolean;
   };
   console: {
-    format: 'styled' | 'ndjson';
+    format: "styled" | "ndjson";
     enabled: boolean;
-    timeType: 'locale' | 'epoch' | 'timestamp' | 'none';
+    timeType: "locale" | "epoch" | "timestamp" | "none";
     colorizeStyledLog: boolean;
   };
 };
@@ -72,3 +73,10 @@ export type LogDataShape = {
   colorize: boolean;
   timeType: string;
 };
+
+export type LogSystem = "app" | "request";
+
+  export interface ResJsonType {
+    logData: string;
+    error?: string;
+  }

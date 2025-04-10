@@ -1,191 +1,193 @@
-<a id="readme-top"></a>
-<br />
+# Error-Aware Client API Documentation
 
-<div align="center">
-  <a href="https://github.com/nathanlschneider/log-2-route">
-    <img src="https://github.com/user-attachments/assets/795e4e5f-926b-4c44-ae68-8e1c6d1ba6f7" alt="Logo" width="188.77" height="94.3">
-  </a>
-<h3 align="center">Log2Route</h3>
-  <p align="center">
-    <strong>Front and back end Logging for Next.js Apps</strong>
-    <br/>
-    <div> Track events, debug issues, and keep an eye on performance all in one place! Inspired by other loggers, you can output to either file or console, or both
-    using Newline delimited JSON (<a href="https://github.com/ndjson/ndjson-spec">https://github.com/ndjson/ndjson-spec</a>) or a more readable and stylized format for direct viewing. Output with color as well.</div>
-  </p>
-</div>
+## Overview
+This API endpoint provides a secure way to process signed payloads with built-in error handling and rate limiting.
 
-<!-- ABOUT THE PROJECT -->
+## Security Requirements
+- HTTPS protocol only
+- IP whitelist enforced
+- Request signing required
+- Rate limit: 100 requests per minute
+- Maximum request size: 1MB
 
-## About The Project
+## Request Format
 
-I was looking for an easy-to-use file logger for my Next.js apps, suitable for both development and production, without the need to deploy to Vercel. I tried several popular solutions, but none of them worked well for my use cases, so of course I had to roll my own.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Getting Started
-
-### Prerequisites
-
-<ul>
-  <li>NextJS v14+</li>
-  <li>Using the app router</li>
-  <li>TypeScript</li>
-</ul>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Installation
-
-Install
-
-```bash
-npm i log-2-route
-```
-
-Configure
-
-```bash
-node ./node_modules/log-2-route/install/config
-```
-
-The config script will perform a few tasks
-
-<ol>
-<li>Setup server config for <code>development</code> and <code>production</code> servers.</ul>
-<li>Create the new <code>/app/logger/route.ts</code> endpoint.</ul>
-<li>Create a new <code>l2f.config.json</code> file in the root of the app.</ul>
-</ol>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Configuration
-
+### Headers
 ```json
 {
-    "logFile": {
-      "format": "ndjson",
-      "enabled": true,
-      "fileName": "app.log",
-      "location": "./",
-      "timeType": "epoch",
-      "colorizeStyledLog": false
-    },
-    "console": {
-      "format": "styled",
-      "enabled": true
-      "timeType": "epoch",
-      "colorizeStyledLog": true
+  "Content-Type": "application/json",
+  "x-platform-origin": "qwerkly-platform",
+  "x-forwarded-proto": "https"
+}
+```
+
+### Body Structure
+```typescript
+{
+  "payload": {
+    // Your data as key-value pairs
+    [key: string]: unknown
+  },
+  "signature": string // Base64 encoded signature
+}
+```
+
+## Signing Requests
+
+### Using the Provided Utility
+```typescript
+import { signPayload } from "./signPayload";
+
+const payload = {
+  message: "Hello World",
+  timestamp: Date.now()
+};
+
+const signedPayload = signPayload(payload);
+```
+
+### Manual Signing Process
+1. Convert payload to JSON string
+2. Sign using SHA-256 algorithm
+3. Encode signature in Base64
+
+## Response Format
+
+### Success Response (200 OK)
+```json
+{
+  "success": true,
+  "received": {
+    // Echo of your payload
+  },
+  "requestId": "unique-request-identifier"
+}
+```
+
+### Error Response
+```json
+{
+  "error": "Error message",
+  "requestId": "unique-request-identifier"
+}
+```
+
+## Status Codes
+
+| Code | Description |
+|------|-------------|
+| 200  | Success |
+| 400  | Invalid JSON or Missing Fields |
+| 403  | Unauthorized or Invalid Signature |
+| 408  | Request Timeout (5s limit) |
+| 413  | Payload Too Large |
+| 429  | Rate Limit Exceeded |
+| 500  | Internal Server Error |
+
+## Example Implementation
+
+```typescript
+async function makeApiRequest(data: Record<string, unknown>) {
+  try {
+    const signedPayload = signPayload(data);
+    
+    const response = await fetch('https://your-api-endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-platform-origin': 'qwerkly-platform',
+        'x-forwarded-proto': 'https'
+      },
+      body: JSON.stringify(signedPayload)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Request failed');
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
   }
-```
-
-Logfile Options
-
-<ul>
-  <li>format: "ndjson" or "styled"</li>
-  <li>enabled: true or false</li>
-  <li>fileName: whatever you want the log file to be named.</li>
-  <li>location: whever you want the log file to live.</li>
-  <li>timeType: "epoch" or "locale" or "timestamp"</li>
-  <li>colorizeStyledLog: true or false</li>
-</ul>
-
-Console Options
-
-<ul>
-  <li>format: "ndjson" or "styled"</li>
-  <li>enabled: true or false (console logs are turned off in production enviroments)</li>
-  <li>timeType: "epoch" or "locale" or "timestamp"</li>
-  <li>colorizeStyledLog: true or false</li>
-</ul>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Usage
-
-Importing
-
-```typescript
-import { logger } from 'log-2-route';
-```
-
-Logging
-
-```typescript
-logger.info('messsage');
-logger.error('message');
-logger.success('message');
-logger.debug('message');
-logger.warn('message');
-```
-
-Example
-
-```typescript
-try {
-  // codes...
-}
-catch(e) {
-  logger.error((e instanceOf Error).message);
-  logger.debug((e instanceOf Error).stack);
 }
 ```
-*logger.debug() will only output to the logfile.
 
-
-```typescript
-logger.success('User has done a thing!');
-```
-
-Logger can take multiple arguments and argument types
+## Error Types
 
 ```typescript
-logger.info('User logged in', { level: 1 }, 12345);
+enum ErrorType {
+  RATE_LIMIT = "Rate limit exceeded",
+  INVALID_IP = "Unauthorized IP",
+  INVALID_PROTOCOL = "HTTPS required",
+  INVALID_ORIGIN = "Invalid origin header",
+  INVALID_SIGNATURE = "Invalid signature",
+  TIMEOUT = "Request timeout",
+  PAYLOAD_TOO_LARGE = "Request too large",
+  INVALID_JSON = "Invalid JSON payload",
+  MISSING_FIELDS = "Missing payload or signature",
+  INTERNAL_ERROR = "Internal server error"
+}
 ```
 
-You must wrap the logger in a useEffect hook when using client side
+## Setup Requirements
 
+1. Generate key pair:
+```bash
+# Generate private key
+openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
+
+# Extract public key
+openssl rsa -pubout -in private.pem -out public.pem
+```
+
+2. Place `private.pem` in client directory
+3. Configure server with `public.pem`
+4. Update allowed IPs in server configuration
+
+## Connection Verification
+
+### Request Format
 ```typescript
-useEffect(()=> logger.info("Logged."), [])
+{
+  "payload": {
+    "verificationType": "connection",
+    "platformId": string,
+    "timestamp": number // Unix timestamp in milliseconds
+  },
+  "signature": string
+}
 ```
 
-And if set to styled will log
-
+### Verification Response
 ```typescript
-[7378237287] INFO - User logged in level: 1
+{
+  "success": true,
+  "verified": true,
+  "platformId": string,
+  "requestId": string
+}
 ```
 
+### Headers
+- `X-Request-ID`: Unique request identifier
+- `X-Verification-Time`: Server timestamp of verification
 
-Output
+### Verification Rules
+- Request must be signed like normal requests
+- Timestamp must be within last 5 minutes
+- Platform ID must match expected format
+- All security checks (IP, origin, etc.) still apply
 
-<ul>
-  <li>Formatted</li>
-</ul>
+### Example
+```typescript
+const verificationPayload = {
+  verificationType: 'connection',
+  platformId: 'your-platform-id',
+  timestamp: Date.now()
+};
 
-```log
-[12/23/2024, 7:40:59 AM] INFO - User Rudy Schneider logged in
+const signedPayload = signPayload(verificationPayload);
+const response = await makeApiRequest(signedPayload);
 ```
-
-<ul>
-  <li>ndjson</li>
-</ul>
-
-```log
-{"type":"info","time":{"epoch":1734957920354},"data":{"message":"User Rudy Schneider logged in"}}
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## License
-
-Distributed under the MIT. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Contact
-
-Nathan Schneider - nlschneider@gmail.com
-
-GitHub: [[https://github.com/nathanlschneider/log-2-route](https://github.com/nathanlschneider/log-2-route)]<br/>
-NPM: [[https://www.npmjs.com/package/log-2-route](https://www.npmjs.com/package/log-2-route)]<br/>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>

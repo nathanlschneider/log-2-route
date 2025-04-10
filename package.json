@@ -1,7 +1,7 @@
 {
-  "name": "log-2-route",
-  "version": "1.11.4",
-  "description": "Logger for NextJS that uses the app router to enable logging from anywhere in your app and beyond.",
+  "name": "error-aware-client",
+  "version": "2.5.10",
+  "description": "Client for Next.js error logging and mitigation platform Error Aware.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -9,8 +9,10 @@
   "files": [
     "dist",
     "install",
-    "api/.well-known/your-service.ts",
-    "src/handleVerification.ts",
+    "api",
+    "api/.well-known",
+    "api/.well-known/route.ts",
+    "api/.well-known/public-key.ts",
     "postinstall.js"
   ],
   "scripts": {
@@ -21,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nathanlschneider/log-2-route.git"
+    "url": "git+https://github.com/WeAreQwerkly/error-aware-client.git"
   },
   "keywords": [
     "nextjs",
@@ -34,19 +36,22 @@
   "author": "Nathan Schneider",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nathanlschneider/log-2-route/issues"
+    "url": "https://github.com/WeAreQwerkly/error-aware-client/issues"
   },
-  "homepage": "https://github.com/nathanlschneider/log-2-route#readme",
+  "homepage": "https://github.com/WeAreQwerkly/error-aware-client#readme",
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/next": "^8.0.7",
+    "@types/node": "^22.14.0",
     "jest": "^29.7.0",
+    "next": "^15.2.4",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "error-aware-client": "link:",
     "jsonwebtoken": "^9.0.2",
     "micro-ansi": "^1.4.1",
     "node-cache": "^5.1.2",
