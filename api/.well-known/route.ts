@@ -1,6 +1,9 @@
+'use server';
+
 import { NextRequest, NextResponse } from "next/server";
 import * as crypto from "crypto";
 import * as fs from "fs";
+import { headers } from "next/headers";
 
 const publicKey = fs.readFileSync(
   process.cwd() + "/app/logger/.well-known/public.pem",
@@ -137,6 +140,10 @@ function verifyConnectionRequest(payload: Record<string, unknown>): boolean {
 }
 
 export async function POST(req: NextRequest) {
+
+  const headersList = await headers();
+  console.log(headersList.entries());
+
   // Request ID and size check
 
   const requestId = generateRequestId();
