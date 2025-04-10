@@ -3,10 +3,10 @@ import type {
   ConfigShape,
   Send,
   LogDataShape,
-  LogSystem
+  LogSystem,
 } from "./l2rTypes/l2rTypes";
 import defaultConfig from "./utils/defaultConfig";
-import { log } from "./utils/dataCom";
+import { logWriter } from "./utils/dataCom";
 import { colorMap } from "./utils/colorMap";
 import ansi from "micro-ansi";
 import combineMessage from "./utils/combineMessage";
@@ -19,7 +19,7 @@ export const logger = {
   },
   error: function (...args: any[]) {
     try {
-      log({
+      logWriter({
         type: "error",
         time: Date.now(),
         msg: combineMessage(...args),
@@ -33,7 +33,7 @@ export const logger = {
 
   info: function (...args: any[]) {
     try {
-      log({
+      logWriter({
         type: "info",
         time: Date.now(),
         msg: combineMessage(...args),
@@ -47,7 +47,7 @@ export const logger = {
 
   success: function (...args: any[]) {
     try {
-      log({
+      logWriter({
         type: "success",
         time: Date.now(),
         msg: combineMessage(...args),
@@ -61,7 +61,7 @@ export const logger = {
 
   debug: function (...args: any[]) {
     try {
-      log({
+      logWriter({
         type: "debug",
         time: Date.now(),
         msg: combineMessage(...args),
@@ -75,7 +75,7 @@ export const logger = {
 
   warn: function (...args: any[]) {
     try {
-      log({
+      logWriter({
         type: "warn",
         time: Date.now(),
         msg: combineMessage(...args),
@@ -100,7 +100,6 @@ async function parseRequestBody(req: Request): Promise<BodyShape> {
   }
   return body;
 }
-
 function formatLogData(
   { body, format, colorize, timeType }: LogDataShape,
   loggerConfig: ConfigShape
@@ -157,7 +156,6 @@ function formatLogData(
 
   return format === "styled" && colorize ? colorizedStr : formattedStr;
 }
-
 async function handleLogFile(
   body: BodyShape,
   loggerConfig: ConfigShape
@@ -175,7 +173,6 @@ async function handleLogFile(
   }
   return "";
 }
-
 function handleConsoleLog(body: BodyShape, loggerConfig: ConfigShape): void {
   if (
     body.type !== "debug" &&
@@ -195,28 +192,20 @@ function handleConsoleLog(body: BodyShape, loggerConfig: ConfigShape): void {
     );
   }
 }
-
-export async function LogReceiver(req: Request): Promise<Response> {
+export async function LogReceiver(log: any) {
   try {
-    validateRequest(req);
+    validateRequest(log);
 
     const loggerConfig = defaultConfig;
-    const body = await parseRequestBody(req);
-
+    const body = await parseRequestBody(log);
     const logData = await handleLogFile(body, loggerConfig);
+    
     handleConsoleLog(body, loggerConfig);
 
     const send: Send = { logData, error: "" };
 
-    return new Response(JSON.stringify(send), {
-      status: 200,
-      statusText: "OK",
-    });
+    return JSON.stringify(send);
   } catch (error) {
     console.error("Error occurred in LogReceiver:", error);
-    return new Response(
-      JSON.stringify({ status: 500, error: (error as Error).message }),
-      { status: 500 }
-    );
   }
 }

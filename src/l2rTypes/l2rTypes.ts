@@ -75,3 +75,8 @@ export type LogDataShape = {
 };
 
 export type LogSystem = "app" | "request";
+
+  export interface ResJsonType {
+    logData: string;
+    error?: string;
+  }

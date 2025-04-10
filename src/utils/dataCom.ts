@@ -1,3 +1,3 @@
-import log from "./log";
+import logWriter from "./logWriter";
 
-export {log};
+export {logWriter};
